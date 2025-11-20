@@ -9,7 +9,8 @@
     import { generateProof, verifyProof } from '$lib/utils/api';
     import type { ProofResult, VerificationResult } from '$lib/utils/api';
     
-    let loading = false;
+    let generatingProof = false;
+    let verifyingProof = false;
     let error: string | null = null;
     let result: ProofResult | null = null;
     let verificationResult: VerificationResult | null = null;
@@ -31,7 +32,7 @@
     });
 
     async function handleGenerateProof() {
-        loading = true;
+        generatingProof = true;
         error = null;
         result = null;
         verificationResult = null;
@@ -45,7 +46,7 @@
             console.error('Error:', err);
             scrollToElement(errorElement);
         } finally {
-            loading = false;
+            generatingProof = false;
         }
     }
 
@@ -55,7 +56,7 @@
             return;
         }
 
-        loading = true;
+        verifyingProof = true;
         error = null;
         verificationResult = null;
 
@@ -67,7 +68,7 @@
             console.error('Error:', err);
             scrollToElement(errorElement);
         } finally {
-            loading = false;
+            verifyingProof = false;
         }
     }
 </script>
@@ -126,10 +127,10 @@
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
                 variant="primary"
-                {loading}
-                on:click={handleGenerateProof}
+                loading={generatingProof}
+                onclick={handleGenerateProof}
             >
-                {#if loading}
+                {#if generatingProof}
                     Generating proof...
                 {:else}
                     Generate ZK Proof
@@ -137,12 +138,12 @@
             </Button>
             <Button 
                 variant="secondary"
-                {loading}
+                loading={verifyingProof}
                 disabled={!result}
-                on:click={handleVerifyProof}
+                onclick={handleVerifyProof}
                 title="Verifies the proof mathematically without needing the pixel values"
             >
-                {#if loading}
+                {#if verifyingProof}
                     Verifying...
                 {:else}
                     Verify Proof
