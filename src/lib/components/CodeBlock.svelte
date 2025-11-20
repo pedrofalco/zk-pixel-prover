@@ -21,7 +21,7 @@
 <div class="relative">
     <button
         on:click={handleCopy}
-        class="absolute top-2 right-2 p-2 bg-gray-700 hover:bg-gray-600 rounded transition-colors text-white z-10"
+        class="absolute top-2 right-2 p-2 bg-gray-700 hover:bg-gray-600 rounded-xs transition-colors text-white z-10"
         title="Copy to clipboard"
     >
         {#if $copied}
@@ -30,6 +30,6 @@
             <Copy size={16} />
         {/if}
     </button>
-    <pre class="bg-black/80 p-4 pr-12 rounded overflow-x-auto text-sm text-gray-200">{code}</pre>
+    <pre class="bg-black/80 p-4 pr-12 rounded-xs overflow-x-auto text-sm text-gray-200">{code}</pre>
 </div>
 

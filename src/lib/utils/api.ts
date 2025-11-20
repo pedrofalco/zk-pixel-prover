@@ -12,9 +12,16 @@ export interface VerificationResult {
     message: string;
 }
 
-export async function generateProof(): Promise<ProofResult> {
+export async function generateProof(pixels: number[], hash: string): Promise<ProofResult> {
     const response = await fetch('/api/proof', {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            pixels,
+            hash
+        })
     });
     
     if (!response.ok) {

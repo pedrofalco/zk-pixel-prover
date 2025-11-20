@@ -1,6 +1,13 @@
 <script lang="ts">
-	import '../app.css';
-	let { children } = $props();
+    import Navbar from '$lib/components/Navbar.svelte';
+    import SocialLinks from '$lib/components/SocialLinks.svelte';
+    import '../app.css';
+    
+    let { children } = $props();
 </script>
 
-{@render children()}
+<Navbar />
+<main>
+    {@render children()}
+</main>
+<SocialLinks />

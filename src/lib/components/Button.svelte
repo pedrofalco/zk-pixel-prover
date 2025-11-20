@@ -12,7 +12,7 @@
 <button 
     class="p-4 font-semibold rounded-sm text-white shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2 justify-center min-w-[200px] {variantClasses[variant]}"
     {disabled}
-    {...$$restProps}
+        {...$$restProps}
 >
     {#if loading}
         <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

@@ -1,19 +1,22 @@
 import { json } from '@sveltejs/kit';
 import * as snarkjs from 'snarkjs';
 import { error } from '@sveltejs/kit';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
-export async function POST() {
+export async function POST({ request }) {
     console.log("Generating proof for image");
     try {
-        // Read image data from input.json
-        const inputPath = join(process.cwd(), 'static', 'input.json');
-        const inputData = JSON.parse(readFileSync(inputPath, 'utf-8'));
+        // Get pixels and hash from request body
+        const { pixels, hash } = await request.json();
         
-        const { pixels, hash } = inputData;
+        if (!pixels || !Array.isArray(pixels) || pixels.length !== 48) {
+            throw new Error('Invalid pixels array. Expected 48 RGB values.');
+        }
         
-        console.log("Image pixels:", pixels);
+        if (!hash || typeof hash !== 'string') {
+            throw new Error('Invalid hash. Expected a string.');
+        }
+        
+        console.log("Image pixels count:", pixels.length);
         console.log("Image hash:", hash);
         
         // Generate proof with pixels and hash

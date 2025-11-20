@@ -3,7 +3,7 @@
     export let element: HTMLElement | null = null;
 </script>
 
-<div bind:this={element} class="w-full max-w-4xl bg-white/15 backdrop-blur-lg rounded p-6 mb-4 border border-white/20 shadow">
+<div bind:this={element} class="w-full max-w-4xl bg-white/15 backdrop-blur-lg rounded-xs p-6 mb-4 border border-white/20 shadow">
     <div class="flex items-center gap-4 mb-3">
         <div class="text-4xl">
             {verificationResult.isValid ? '✅' : '❌'}
