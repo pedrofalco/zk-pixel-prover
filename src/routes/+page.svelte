@@ -8,7 +8,8 @@
     import ContentCard from '$lib/components/ContentCard.svelte';
     import ProcessedImageDisplay from '$lib/components/ProcessedImageDisplay.svelte';
     import { scrollToElement } from '$lib/utils/scroll';
-    import { generateProof } from '$lib/utils/api';
+    import { downloadJSON } from '$lib/utils/download';
+    import { handleGenerateProof } from '$lib/utils/proof';
     import type { ProofResult } from '$lib/utils/api';
     
     let generatingProof = false;
@@ -25,43 +26,25 @@
         error = null;
     }
 
-    async function handleGenerateProof() {
+    async function onGenerateProof() {
         if (!imageData) {
             error = 'Please upload an image first';
             scrollToElement(errorElement);
             return;
         }
 
-        generatingProof = true;
-        error = null;
-        result = null;
-
-        try {
-            result = await generateProof(imageData.pixels, imageData.hash);
-            console.log('Proof generated:', result);
-            scrollToElement(resultElement);
-        } catch (err) {
-            error = err instanceof Error ? err.message : 'An error occurred';
-            console.error('Error:', err);
-            scrollToElement(errorElement);
-        } finally {
-            generatingProof = false;
-        }
+        await handleGenerateProof(
+            imageData.pixels,
+            imageData.hash,
+            (loading) => { generatingProof = loading; },
+            (err) => { error = err; scrollToElement(errorElement); },
+            (res) => { result = res; scrollToElement(resultElement); }
+        );
     }
 
     function downloadProof() {
         if (!result) return;
-        
-        const dataStr = JSON.stringify(result, null, 2);
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(dataBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'proof.json';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+        downloadJSON(result, 'proof.json');
     }
 </script>
 
@@ -104,7 +87,7 @@
                 variant="primary"
                 loading={generatingProof}
                 disabled={!imageData}
-                onclick={handleGenerateProof}
+                onclick={onGenerateProof}
             >
                 {#if generatingProof}
                     Generating proof...

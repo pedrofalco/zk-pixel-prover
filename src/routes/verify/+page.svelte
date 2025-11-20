@@ -8,7 +8,7 @@
     import ContentCard from '$lib/components/ContentCard.svelte';
     import { scrollToElement } from '$lib/utils/scroll';
     import { loadProofFile } from '$lib/utils/file';
-    import { verifyProof } from '$lib/utils/api';
+    import { handleVerifyProof } from '$lib/utils/proof';
     import type { VerificationResult } from '$lib/utils/api';
     
     let verifyingProof = false;
@@ -19,7 +19,7 @@
     let verificationElement: HTMLElement;
     let errorElement: HTMLElement;
 
-    async function handleFileSelected(file: File) {
+    async function onFileSelected(file: File) {
         try {
             proofData = await loadProofFile(file);
             error = null;
@@ -31,27 +31,14 @@
         }
     }
 
-    async function handleVerifyProof() {
-        if (!proofData) {
-            error = 'Please upload a proof file first';
-            scrollToElement(errorElement);
-            return;
-        }
-
-        verifyingProof = true;
-        error = null;
-        verificationResult = null;
-
-        try {
-            verificationResult = await verifyProof(proofData.proof, proofData.publicSignals);
-            scrollToElement(verificationElement);
-        } catch (err) {
-            error = err instanceof Error ? err.message : 'An error occurred';
-            console.error('Error:', err);
-            scrollToElement(errorElement);
-        } finally {
-            verifyingProof = false;
-        }
+    async function onVerifyProof() {
+        await handleVerifyProof(
+            proofData?.proof,
+            proofData?.publicSignals,
+            (loading) => { verifyingProof = loading; },
+            (err) => { error = err; scrollToElement(errorElement); },
+            (res) => { verificationResult = res; scrollToElement(verificationElement); }
+        );
     }
 </script>
 
@@ -77,7 +64,7 @@
                     <FileUpload 
                         accept=".json,application/json"
                         label="Upload a proof.json file"
-                        onFileSelected={handleFileSelected}
+                        onFileSelected={onFileSelected}
                     />
 
                     {#if proofData}
@@ -94,7 +81,7 @@
                 variant="secondary"
                 loading={verifyingProof}
                 disabled={!proofData}
-                onclick={handleVerifyProof}
+                onclick={onVerifyProof}
                 title="Verifies if the proof matches the witness image (manoloide_4x4.jpeg)"
             >
                 {#if verifyingProof}
