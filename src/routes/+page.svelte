@@ -1,13 +1,19 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { Copy, Check } from 'lucide-svelte';
+    import Button from '$lib/components/Button.svelte';
+    import ErrorAlert from '$lib/components/ErrorAlert.svelte';
+    import ProofResultCard from '$lib/components/ProofResultCard.svelte';
+    import VerificationResultCard from '$lib/components/VerificationResultCard.svelte';
+    import { pixelToColor } from '$lib/utils/image';
+    import { scrollToElement } from '$lib/utils/scroll';
+    import { generateProof, verifyProof } from '$lib/utils/api';
+    import type { ProofResult, VerificationResult } from '$lib/utils/api';
     
     let loading = false;
     let error: string | null = null;
-    let result: { proof: any; publicSignals: any } | null = null;
-    let verificationResult: { isValid: boolean; message: string } | null = null;
+    let result: ProofResult | null = null;
+    let verificationResult: VerificationResult | null = null;
     let imageData: { pixels: number[]; hash: string } | null = null;
-    let copied = false;
     
     let resultElement: HTMLElement;
     let verificationElement: HTMLElement;
@@ -24,70 +30,26 @@
         }
     });
 
-    function pixelToColor(pixels: number[], index: number): string {
-        // pixels is a flat array: [R1, G1, B1, R2, G2, B2, ..., R16, G16, B16]
-        // index is the pixel index (0-15)
-        const baseIndex = index * 3;
-        const r = pixels[baseIndex];
-        const g = pixels[baseIndex + 1];
-        const b = pixels[baseIndex + 2];
-        return `rgb(${r}, ${g}, ${b})`;
-    }
-
-    async function copyToClipboard(text: string) {
-        try {
-            await navigator.clipboard.writeText(text);
-            copied = true;
-            setTimeout(() => {
-                copied = false;
-            }, 2000);
-        } catch (err) {
-            console.error('Failed to copy:', err);
-        }
-    }
-
-    async function generateProof() {
+    async function handleGenerateProof() {
         loading = true;
         error = null;
         result = null;
         verificationResult = null;
 
         try {
-            const response = await fetch('/api/proof', {
-                method: 'POST'
-            });
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to generate proof');
-            }
-
-            const data = await response.json();
-            result = data.data;
+            result = await generateProof();
             console.log('Proof generated:', result);
-            
-            // Scroll to result after a brief delay to ensure DOM is updated
-            setTimeout(() => {
-                if (resultElement) {
-                    resultElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 100);
+            scrollToElement(resultElement);
         } catch (err) {
             error = err instanceof Error ? err.message : 'An error occurred';
             console.error('Error:', err);
-            
-            // Scroll to error
-            setTimeout(() => {
-                if (errorElement) {
-                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 100);
+            scrollToElement(errorElement);
         } finally {
             loading = false;
         }
     }
 
-    async function verifyProof() {
+    async function handleVerifyProof() {
         if (!result) {
             error = 'No proof to verify';
             return;
@@ -98,41 +60,12 @@
         verificationResult = null;
 
         try {
-            const response = await fetch('/api/verify', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    proof: result.proof,
-                    publicSignals: result.publicSignals
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to verify proof');
-            }
-
-            const data = await response.json();
-            verificationResult = data.data;
-            
-            // Scroll to verification result after a brief delay
-            setTimeout(() => {
-                if (verificationElement) {
-                    verificationElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 100);
+            verificationResult = await verifyProof(result.proof, result.publicSignals);
+            scrollToElement(verificationElement);
         } catch (err) {
             error = err instanceof Error ? err.message : 'An error occurred';
             console.error('Error:', err);
-            
-            // Scroll to error
-            setTimeout(() => {
-                if (errorElement) {
-                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 100);
+            scrollToElement(errorElement);
         } finally {
             loading = false;
         }
@@ -161,103 +94,70 @@
                     and prove it cryptographically. The proof is verifiable without revealing any pixel values.
                 </p>
                 
-                <!-- <div class="bg-white/20 p-4 rounded-xl border-l-4 border-yellow-400 font-medium">
-                    Only the image hash is revealed, never the original pixels.
-                </div> -->
+                <!-- {#if imageData}
+                    <div class="flex flex-col items-center gap-4 my-6">
+                        <div class="text-sm font-semibold">Processed Image (4x4 pixels, RGB color) - <span class="text-red-600">BLURRED</span></div>
+                        <div class="grid grid-cols-4 gap-1 border-2 border-gray-400 p-2 bg-gray-100 rounded blur-sm relative">
+                            {#each Array(16) as _, i}
+                                {@const baseIndex = i * 3}
+                                {@const r = imageData.pixels[baseIndex]}
+                                {@const g = imageData.pixels[baseIndex + 1]}
+                                {@const b = imageData.pixels[baseIndex + 2]}
+                                <div 
+                                    class="w-12 h-12 border border-gray-300"
+                                    style="background-color: {pixelToColor(imageData.pixels, i)}"
+                                ></div>
+                            {/each}
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/20 rounded">
+                                <span class="text-white font-bold text-lg">🔒 Hidden</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-600 font-mono break-all">
+                            Public Hash: {imageData.hash}
+                        </div>
+                        <p class="text-xs text-gray-500 italic">
+                            The actual pixel values are private and never revealed in the proof
+                        </p>
+                    </div>
+                {/if} -->
             </div>
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button 
-                class="p-4 font-semibold rounded-sm bg-blue-700 text-white shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2 min-w-[200px] justify-center"
-                on:click={generateProof} 
-                disabled={loading}
+            <Button 
+                variant="primary"
+                {loading}
+                on:click={handleGenerateProof}
             >
                 {#if loading}
-                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
                     Generating proof...
                 {:else}
                     Generate ZK Proof
                 {/if}
-            </button>
-
-            <button 
-                class="p-4 font-semibold rounded-sm bg-green-700 text-white shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none flex items-center gap-2 min-w-[200px] justify-center"
-                on:click={verifyProof} 
-                disabled={loading || !result}
+            </Button>
+            <Button 
+                variant="secondary"
+                {loading}
+                disabled={!result}
+                on:click={handleVerifyProof}
                 title="Verifies the proof mathematically without needing the pixel values"
             >
                 {#if loading}
-                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
                     Verifying...
                 {:else}
                     Verify Proof
                 {/if}
-            </button>
+            </Button>
         </div>
     </div>
 
-    {#if error}
-        <div bind:this={errorElement} class="w-full max-w-4xl bg-red-500/20 backdrop-blur-lg rounded p-4 mb-4 flex items-center gap-3 border border-red-400/40">
-            <span class="text-2xl">⚠️</span>
-            <span>{error}</span>
-        </div>
-    {/if}
+    <ErrorAlert bind:error bind:element={errorElement} />
 
     {#if result}
-        <div bind:this={resultElement} class="w-full max-w-4xl bg-white/15 backdrop-blur-lg rounded p-8 mb-4 border border-white/20 shadow">
-            <h3 class="text-2xl font-bold mb-2">Proof Generated</h3>
-            <p class="mb-4 opacity-90">
-                A ZK proof was created that demonstrates knowledge of the image without revealing the pixels.
-            </p>
-            <p class="text-sm text-gray-400 mb-4">
-                The proof contains cryptographic evidence that you know the pixel values, but the pixels themselves are never revealed.
-            </p>
-            <details class="mt-4">
-                <summary class="cursor-pointer p-3 bg-white/10 rounded mb-2 font-medium hover:bg-white/20 transition-colors">
-                    View technical details
-                </summary>
-                <div class="relative mt-2">
-                    <button
-                        on:click={() => copyToClipboard(JSON.stringify(result, null, 2))}
-                        class="absolute top-2 right-2 p-2 bg-gray-700 hover:bg-gray-600 rounded transition-colors text-white"
-                        title="Copy to clipboard"
-                    >
-                        {#if copied}
-                            <Check size={16} />
-                        {:else}
-                            <Copy size={16} />
-                        {/if}
-                    </button>
-                    <pre class="bg-black/80 p-4 pr-12 rounded overflow-x-auto text-sm text-gray-200">{JSON.stringify(result, null, 2)}</pre>
-                </div>
-            </details>
-        </div>
+        <ProofResultCard {result} bind:element={resultElement} />
     {/if}
 
     {#if verificationResult}
-        <div bind:this={verificationElement} class="w-full max-w-4xl bg-white/15 backdrop-blur-lg rounded p-6 mb-4 border border-white/20 shadow">
-            <div class="flex items-center gap-4 mb-3">
-                <div class="text-4xl">
-                    {verificationResult.isValid ? '✅' : '❌'}
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold mb-1">
-                        {verificationResult.isValid ? 'Proof Valid' : 'Proof Invalid'}
-                    </h3>
-                    <p class="opacity-90">{verificationResult.message}</p>
-                </div>
-            </div>
-            <div class="text-sm text-gray-400 border-t border-white/20 pt-3 mt-3">
-                <strong>How it works:</strong> Verification checks the proof mathematically using only the public hash and verification key. 
-                No pixel values are needed or revealed during verification.
-            </div>
-        </div>
+        <VerificationResultCard {verificationResult} bind:element={verificationElement} />
     {/if}
 </div>
