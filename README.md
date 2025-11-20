@@ -191,6 +191,12 @@ This project implements a zero-knowledge proof system where:
 2. Uses verification key to check proof validity
 3. Gets yes/no answer without learning the secret
 
+## TODO / Future Improvements
+
+- [ ] **Protection against replay attacks**: Add nonce/timestamp to proofs to make them unique and non-reusable
+- [ ] **Hash privacy**: Implement commitment schemes to hide the hash until verification, preventing identification of the image being verified
+- [ ] **Support for larger images**: Increase resolution from 4x4 to 8x8 or 16x16 pixels for more practical use cases
+
 ## Security Considerations
 
 - Keep the proving key secure
