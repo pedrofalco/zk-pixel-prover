@@ -191,10 +191,55 @@ This project implements a zero-knowledge proof system where:
 2. Uses verification key to check proof validity
 3. Gets yes/no answer without learning the secret
 
+## Use Cases & Practical Applications
+
+### Current Limitations
+This prototype processes images at 4x4 pixels, which limits practical applications. However, the concept can be extended to:
+
+### Potential Use Cases
+
+1. **Image-Based Authentication**
+   - Prove knowledge of a secret image without revealing it
+   - Alternative to password-based authentication
+   - Example: "Prove you know the secret image to access this system"
+
+2. **Content Verification (Sensitive Images)**
+   - Prove you have access to sensitive/private images without exposing them
+   - Useful for confidential content verification
+   - Example: Medical images, private documents, classified content
+
+3. **Puzzle/Challenge Systems**
+   - Cryptographic puzzles where the solution is an image
+   - Prove you solved the puzzle without revealing the solution
+   - Example: CTF challenges, treasure hunts, educational games
+
+4. **Access Control**
+   - Prove you have a specific image (like a key) without showing it
+   - Multi-factor authentication using visual secrets
+   - Example: "Prove you have the key image to unlock this feature"
+
+5. **Educational/Demonstration**
+   - Clear example of how ZKPs work with visual data
+   - Teaching tool for understanding zero-knowledge concepts
+   - Foundation for more complex ZKP systems
+
+### Why Not for Regular Images?
+For publicly visible images (like NFTs), this approach doesn't make much sense because:
+- The image is already public, so hiding it provides no benefit
+- NFT ownership is better proven through blockchain signatures
+- The value is in the public display, not in hiding it
+
+### When It Makes Sense
+This approach is valuable when:
+- The **image itself is the secret** (not just proof of ownership)
+- You need to **prove knowledge without revealing** the content
+- The image is **sensitive/private** and shouldn't be exposed
+- You're building **puzzle/challenge systems** where the image is the solution
+
 ## TODO / Future Improvements
 
-- [ ] **Protection against replay attacks**: Add nonce/timestamp to proofs to make them unique and non-reusable
-- [ ] **Hash privacy**: Implement commitment schemes to hide the hash until verification, preventing identification of the image being verified
+- [ ] **Protection against replay attacks**: Add nonce/timestamp to proofs to make them unique and non-reusable (especially important for blockchain implementations)
+- [ ] **Hash privacy**: Implement commitment schemes to hide the hash until verification, preventing identification of the image being verified (critical for blockchain/public ledgers)
 - [ ] **Support for larger images**: Increase resolution from 4x4 to 8x8 or 16x16 pixels for more practical use cases
 
 ## Security Considerations
