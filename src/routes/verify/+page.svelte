@@ -45,7 +45,7 @@
 <div class="min-h-screen flex flex-col items-center justify-center px-4 py-8 text-black font-mono">
     <PageHeader 
         title="Verify Zero-Knowledge Proof"
-        description="Upload a proof file to verify if it matches the <strong>witness image</strong>."
+        description="Upload a proof file to verify if it matches the <strong>reference image</strong>."
     />
 
     <div class="w-full max-w-4xl mb-6">
@@ -53,11 +53,11 @@
             <div class="space-y-4 leading-relaxed">
                 <p>
                     Upload a <code class="bg-black/20 px-2 py-1 rounded">proof.json</code> file to verify 
-                    if it corresponds to the witness image (<strong>manoloide_4x4.jpeg</strong>).
+                    if it corresponds to the reference image (<strong>manoloide_4x4.jpeg</strong>).
                 </p>
                 <InfoCard variant="blue">
                     <strong>🔍 How it works:</strong> The verification checks if the proof was generated 
-                    for the witness image without revealing any pixel values. Only the hash is compared.
+                    for the reference image without revealing any pixel values. Only the hash is compared.
                 </InfoCard>
                 
                 <div class="flex flex-col items-center gap-4 my-6">
@@ -82,7 +82,7 @@
                 loading={verifyingProof}
                 disabled={!proofData}
                 onclick={onVerifyProof}
-                title="Verifies if the proof matches the witness image (manoloide_4x4.jpeg)"
+                title="Verifies if the proof matches the reference image (manoloide_4x4.jpeg)"
             >
                 {#if verifyingProof}
                     Verifying...

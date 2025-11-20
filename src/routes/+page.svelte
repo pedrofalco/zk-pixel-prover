@@ -7,6 +7,7 @@
     import InfoCard from '$lib/components/InfoCard.svelte';
     import ContentCard from '$lib/components/ContentCard.svelte';
     import ProcessedImageDisplay from '$lib/components/ProcessedImageDisplay.svelte';
+    import ReferenceImageDownload from '$lib/components/ReferenceImageDownload.svelte';
     import { scrollToElement } from '$lib/utils/scroll';
     import { downloadJSON } from '$lib/utils/download';
     import { handleGenerateProof } from '$lib/utils/proof';
@@ -59,12 +60,13 @@
             <div class="space-y-4 leading-relaxed">
                 <p>
                     Upload any image to generate a <strong>cryptographic proof</strong> 
-                    that demonstrates you know exactly those pixels, but without showing them.
+                    that demonstrates you know exactly those pixels, but without showing them. 
+                    Or <ReferenceImageDownload />
                 </p>
                 <InfoCard variant="blue">
                     <strong>💡 The Power:</strong> Generate proofs for any image and download them. 
                     Then go to <a href="/verify" class="underline font-semibold">/verify</a> to check if a proof 
-                    matches the <strong>witness image</strong> (manoloide_4x4.jpeg) without revealing any pixel values.
+                    matches the <strong>reference image</strong> (manoloide_4x4.jpeg) without revealing any pixel values.
                 </InfoCard>
                 
                 <div class="flex flex-col items-center gap-4 my-6">

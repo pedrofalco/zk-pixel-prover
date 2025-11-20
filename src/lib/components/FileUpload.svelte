@@ -92,11 +92,11 @@
             </div>
             <div>
                 {#if processing}
-                    <p class="text-lg font-semibold text-gray-700">{processingMessage}</p>
+                    <p class=" font-semibold text-gray-700">{processingMessage}</p>
                 {:else if isDragging}
-                    <p class="text-lg font-semibold text-purple-700">Drop your file here</p>
+                    <p class=" font-semibold text-purple-700">Drop your file here</p>
                 {:else}
-                    <p class="text-lg font-semibold text-gray-700 mb-2">Drag & drop your file</p>
+                    <p class=" font-semibold text-gray-700 mb-2">Drag & drop your file</p>
                     <p class="text-sm text-gray-500 mb-4">or</p>
                     <button
                         onclick={triggerFileInput}

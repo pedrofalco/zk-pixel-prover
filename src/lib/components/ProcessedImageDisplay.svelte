@@ -15,7 +15,7 @@
             ></div>
         {/each}
         <div class="absolute inset-0 flex items-center justify-center bg-black/20 rounded">
-            <span class="text-white font-bold text-lg">🔒 Hidden</span>
+            <span class="text-white font-bold ">🔒 Hidden</span>
         </div>
     </div>
     <div class="text-xs text-gray-600 font-mono break-all mt-2 text-center">

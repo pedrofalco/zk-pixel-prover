@@ -7,11 +7,11 @@ import { buildPoseidon } from 'circomlibjs';
 
 export async function GET() {
     try {
-        // Load the witness image
-        const witnessImagePath = join(process.cwd(), 'static', 'manoloide_4x4.jpeg');
+        // Load the reference image
+        const referenceImagePath = join(process.cwd(), 'static', 'manoloide_4x4.jpeg');
         
         // Process image: resize to 4x4, remove alpha, get RGB pixels
-        const processedBuffer = await sharp(witnessImagePath)
+        const processedBuffer = await sharp(referenceImagePath)
             .resize(4, 4, { fit: 'fill' })
             .removeAlpha()
             .raw()
@@ -42,7 +42,7 @@ export async function GET() {
             }
         });
     } catch (err) {
-        console.error('Witness hash calculation error:', err);
+        console.error('Reference hash calculation error:', err);
         throw error(500, err instanceof Error ? err.message : String(err));
     }
 }
