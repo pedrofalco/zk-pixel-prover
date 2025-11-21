@@ -1,0 +1,15 @@
+diff --git a/node_modules/web-worker/cjs/node.js b/node_modules/web-worker/cjs/node.js
+index 0a7fb94..2f67239 100644
+--- a/node_modules/web-worker/cjs/node.js
++++ b/node_modules/web-worker/cjs/node.js
+@@ -147,6 +147,10 @@ function mainThread() {
+ }
+ 
+ function workerThread() {
++  // Handle case when workerData is undefined (e.g., during Vite build)
++  if (!threads.workerData) {
++    return mainThread();
++  }
+   let {
+     mod,
+     name,
