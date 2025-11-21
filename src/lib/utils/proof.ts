@@ -9,16 +9,17 @@ export async function handleGenerateProof(
     pixels: number[],
     hash: string,
     setLoading: (loading: boolean) => void,
-    setError: (error: string) => void,
+    setError: (error: string | null) => void,
     setResult: (result: ProofResult) => void
 ): Promise<void> {
     setLoading(true);
-    setError('An error occurred');
+    setError(null);
 
     try {
         const result = await generateProof(pixels, hash);
         console.log('Proof generated:', result);
         setResult(result);
+        setError(null);
     } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'An error occurred';
         console.error('Error:', err);
@@ -32,7 +33,7 @@ export async function handleVerifyProof(
     proof: any,
     publicSignals: any,
     setLoading: (loading: boolean) => void,
-    setError: (error: string) => void,
+    setError: (error: string | null) => void,
     setResult: (result: VerificationResult) => void
 ): Promise<void> {
     if (!proof || !publicSignals) {
@@ -41,11 +42,12 @@ export async function handleVerifyProof(
     }
 
     setLoading(true);
-    setError('An error occurred');
+    setError(null);
 
     try {
         const result = await verifyProof(proof, publicSignals);
         setResult(result);
+        setError(null);
     } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'An error occurred';
         console.error('Error:', err);

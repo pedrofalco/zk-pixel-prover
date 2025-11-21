@@ -1,7 +1,8 @@
 import { json } from '@sveltejs/kit';
 import * as snarkjs from 'snarkjs';
 import { error } from '@sveltejs/kit';
-
+import { readFileSync } from 'fs';
+import { getCircuitPath } from '$lib/utils/circuit-paths';
 
 export async function POST({ request, fetch }) {
     try {
@@ -15,9 +16,9 @@ export async function POST({ request, fetch }) {
         const referenceData = await referenceResponse.json();
         const referenceHash = referenceData.data.hash;
         
-        // Use event.fetch instead of global fetch
-        const vKeyResponse = await fetch('/src/lib/circuits/keys/verification_key.json');
-        const vKey = await vKeyResponse.json();
+        // Resolve path for both development and production
+        const vKeyPath = getCircuitPath('circuits/keys/verification_key.json');
+        const vKey = JSON.parse(readFileSync(vKeyPath, 'utf-8'));
         
         // Verify the proof mathematically
         const isMathematicallyValid = await snarkjs.groth16.verify(vKey, publicSignals, proof);

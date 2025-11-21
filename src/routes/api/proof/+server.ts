@@ -1,6 +1,7 @@
 import { json } from '@sveltejs/kit';
 import * as snarkjs from 'snarkjs';
 import { error } from '@sveltejs/kit';
+import { getCircuitPath } from '$lib/utils/circuit-paths';
 
 export async function POST({ request }) {
     console.log("Generating proof for image");
@@ -19,14 +20,18 @@ export async function POST({ request }) {
         console.log("Image pixels count:", pixels.length);
         console.log("Image hash:", hash);
         
+        // Resolve paths for both development and production
+        const wasmPath = getCircuitPath('circuits/compiled/circuit_js/circuit.wasm');
+        const zkeyPath = getCircuitPath('circuits/keys/circuit_0000.zkey');
+        
         // Generate proof with pixels and hash
         const { proof, publicSignals } = await snarkjs.groth16.fullProve(
             {
                 pixels: pixels,
                 hash: hash
             },
-            "src/lib/circuits/compiled/circuit_js/circuit.wasm",
-            "src/lib/circuits/keys/circuit_0000.zkey"
+            wasmPath,
+            zkeyPath
         );
 
         console.log("Proof generated: ", proof);
