@@ -1,6 +1,5 @@
 import { json } from '@sveltejs/kit';
 import { error } from '@sveltejs/kit';
-import { readFileSync } from 'fs';
 import { join } from 'path';
 import sharp from 'sharp';
 import { buildPoseidon } from 'circomlibjs';
@@ -8,7 +7,7 @@ import { buildPoseidon } from 'circomlibjs';
 export async function GET() {
     try {
         // Load the reference image
-        const referenceImagePath = join(process.cwd(), 'static', 'manoloide_4x4.jpeg');
+        const referenceImagePath = join(process.cwd(), 'static', 'sample_4x4.jpeg');
         
         // Process image: resize to 4x4, remove alpha, get RGB pixels
         const processedBuffer = await sharp(referenceImagePath)

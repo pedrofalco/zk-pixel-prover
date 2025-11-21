@@ -2,7 +2,7 @@
     
     async function downloadReferenceImage() {
         try {
-            const response = await fetch('/manoloide_4x4.jpeg');
+            const response = await fetch('/sample_4x4.jpeg');
             if (!response.ok) {
                 throw new Error('Failed to fetch reference image');
             }
@@ -11,7 +11,7 @@
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'manoloide_4x4.jpeg';
+            link.download = 'sample_4x4.jpeg';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

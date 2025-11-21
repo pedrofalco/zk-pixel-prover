@@ -53,7 +53,7 @@
             <div class="space-y-4 leading-relaxed">
                 <p>
                     Upload a <code class="bg-black/20 px-2 py-1 rounded">proof.json</code> file to verify 
-                    if it corresponds to the reference image (<strong>manoloide_4x4.jpeg</strong>).
+                    if it corresponds to the reference image (<strong>sample_4x4.jpeg</strong>).
                 </p>
                 <InfoCard variant="blue">
                     <strong>🔍 How it works:</strong> The verification checks if the proof was generated 
@@ -82,7 +82,7 @@
                 loading={verifyingProof}
                 disabled={!proofData}
                 onclick={onVerifyProof}
-                title="Verifies if the proof matches the reference image (manoloide_4x4.jpeg)"
+                title="Verifies if the proof matches the reference image (sample_4x4.jpeg)"
             >
                 {#if verifyingProof}
                     Verifying...

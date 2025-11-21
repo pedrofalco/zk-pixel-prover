@@ -66,7 +66,7 @@
                 <InfoCard variant="blue">
                     <strong>💡 The Power:</strong> Generate proofs for any image and download them. 
                     Then go to <a href="/verify" class="underline font-semibold">/verify</a> to check if a proof 
-                    matches the <strong>reference image</strong> (manoloide_4x4.jpeg) without revealing any pixel values.
+                    matches the <strong>reference image</strong> (sample_4x4.jpeg) without revealing any pixel values.
                 </InfoCard>
                 
                 <div class="flex flex-col items-center gap-4 my-6">

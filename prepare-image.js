@@ -61,4 +61,4 @@ async function imageToPixels(imagePath) {
 }
 
 // Example usage:
-imageToPixels('static/manoloide_4x4.jpeg');
+imageToPixels('static/sample_4x4.jpeg');
