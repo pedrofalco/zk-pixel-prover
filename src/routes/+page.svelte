@@ -51,7 +51,7 @@
 
 <div class="min-h-screen flex flex-col items-center justify-center px-4 py-8 text-black font-mono">
     <PageHeader 
-        title="Zero-Knowledge Image Proof"
+        title="Zero-Knowledge Pixel Proof"
         description="Prove you know a specific image <strong>without revealing its pixels</strong>."
     />
 
@@ -59,9 +59,20 @@
         <ContentCard>
             <div class="space-y-4 leading-relaxed">
                 <p>
-                    Upload any image to generate a <strong>cryptographic proof</strong> 
-                    that demonstrates you know exactly those pixels, but without showing them. 
-                    Or <ReferenceImageDownload />
+                    Generate a <strong>cryptographic proof</strong> that proves you know an image's pixels without revealing them. 
+                    Upload any image, <ReferenceImageDownload 
+                        imagePath="/sample_4x4.jpeg"
+                        filename="sample_4x4.jpeg"
+                        errorMessage="Failed to download reference image"
+                        text="download the reference image"
+                        title="Download the reference image to test the system"
+                    />, or <ReferenceImageDownload 
+                        imagePath="/sample_4x4_fake.jpeg"
+                        filename="sample_4x4_fake.jpeg"
+                        errorMessage="Failed to download fake image"
+                        text="download a fake image"
+                        title="Download a fake image to test verification"
+                    /> to test verification.
                 </p>
                 <InfoCard variant="blue">
                     <strong>💡 The Power:</strong> Generate proofs for any image and download them. 

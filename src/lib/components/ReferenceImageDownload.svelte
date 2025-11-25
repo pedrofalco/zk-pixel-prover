@@ -1,30 +1,15 @@
 <script lang="ts">
+    import { downloadImage } from '$lib/utils/download';
     
-    async function downloadReferenceImage() {
-        try {
-            const response = await fetch('/sample_4x4.jpeg');
-            if (!response.ok) {
-                throw new Error('Failed to fetch reference image');
-            }
-            
-            const blob = await response.blob();
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'sample_4x4.jpeg';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-        } catch (err) {
-            console.error('Error downloading reference image:', err);
-            alert('Failed to download reference image');
-        }
-    }
+    export let imagePath: string;
+    export let filename: string;
+    export let errorMessage: string;
+    export let text: string;
+    export let title: string;
 </script>
 
 <button
-    onclick={downloadReferenceImage}
+    onclick={() => downloadImage(imagePath, filename, errorMessage)}
     class="underline text-black font-semibold hover:opacity-80 transition-opacity"
-    title="Download the reference image to test the system"
->download the reference image.</button>
+    {title}
+>{text}</button>
