@@ -1,4 +1,4 @@
-// src/lib/utils/noir-proof.ts
+// src/lib/utils/plonk-backend.ts
 import { readFileSync } from "fs";
 import { Noir } from "@noir-lang/noir_js";
 import { UltraHonkBackend } from "@aztec/bb.js";

@@ -1,6 +1,6 @@
 // src/routes/api/plonk/proof/+server.ts
 import { json, error } from "@sveltejs/kit";
-import { generateNoirProof } from "$lib/utils/noir-proof";
+import { generateNoirProof } from "$lib/utils/plonk-backend";
 
 export async function POST({ request }) {
   try {

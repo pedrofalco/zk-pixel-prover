@@ -11,9 +11,9 @@
     import ProofSystemToggle from '$lib/components/ProofSystemToggle.svelte';
     import { scrollToElement } from '$lib/utils/scroll';
     import { downloadJSON } from '$lib/utils/download';
-    import { handleGenerateProof } from '$lib/utils/proof';
+    import { handleGenerateProof } from '$lib/utils/groth16-proof';
     import { handleGeneratePlonkProof } from '$lib/utils/plonk-proof';
-    import type { ProofResult } from '$lib/utils/api';
+    import type { ProofResult } from '$lib/utils/groth16-api';
     import type { PlonkProofResult } from '$lib/utils/plonk-api';
     
     let proofSystem: 'groth16' | 'plonk' = 'groth16';

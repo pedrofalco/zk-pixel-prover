@@ -2,8 +2,8 @@
  * Proof generation and verification handlers
  */
 
-import { generateProof, verifyProof } from './api';
-import type { ProofResult, VerificationResult } from './api';
+import { generateProof, verifyProof } from './groth16-api';
+import type { ProofResult, VerificationResult } from './groth16-api';
 
 export async function handleGenerateProof(
     pixels: number[],

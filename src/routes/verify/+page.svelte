@@ -9,9 +9,9 @@
     import ProofSystemToggle from '$lib/components/ProofSystemToggle.svelte';
     import { scrollToElement } from '$lib/utils/scroll';
     import { loadProofFile } from '$lib/utils/file';
-    import { handleVerifyProof } from '$lib/utils/proof';
+    import { handleVerifyProof } from '$lib/utils/groth16-proof';
     import { handleVerifyPlonkProof } from '$lib/utils/plonk-proof';
-    import type { VerificationResult } from '$lib/utils/api';
+    import type { VerificationResult } from '$lib/utils/groth16-api';
     import type { PlonkVerificationResult } from '$lib/utils/plonk-api';
     
     let proofSystem: 'groth16' | 'plonk' = 'groth16';
