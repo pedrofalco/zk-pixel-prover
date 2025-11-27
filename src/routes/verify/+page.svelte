@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { tick } from 'svelte';
     import Button from '$lib/components/ui/Button.svelte';
     import ErrorAlert from '$lib/components/ui/ErrorAlert.svelte';
     import VerificationResultCard from '$lib/components/VerificationResultCard.svelte';
@@ -38,6 +39,7 @@
         } catch (err) {
             error = err instanceof Error ? err.message : 'Failed to load proof file';
             console.error('Error loading proof:', err);
+            await tick();
             scrollToElement(errorElement);
         }
     }
@@ -54,8 +56,16 @@
                 proofData?.proof,
                 proofData?.publicSignals,
                 (loading) => { verifyingProof = loading; },
-                (err) => { error = err; scrollToElement(errorElement); },
-                (res) => { verificationResult = res; scrollToElement(verificationElement); }
+                async (err) => { 
+                    error = err; 
+                    await tick();
+                    scrollToElement(errorElement); 
+                },
+                async (res) => { 
+                    verificationResult = res; 
+                    await tick(); // Wait for DOM to update
+                    scrollToElement(verificationElement); 
+                }
             );
         } else {
             const publicSignals = Array.isArray(proofData.publicSignals)
@@ -66,8 +76,16 @@
                 proofData.proof,
                 publicSignals,
                 (loading) => { verifyingProof = loading; },
-                (err) => { error = err; scrollToElement(errorElement); },
-                (res) => { verificationResult = res; scrollToElement(verificationElement); }
+                async (err) => { 
+                    error = err; 
+                    await tick();
+                    scrollToElement(errorElement); 
+                },
+                async (res) => { 
+                    verificationResult = res; 
+                    await tick(); // Wait for DOM to update
+                    scrollToElement(verificationElement); 
+                }
             );
         }
     }

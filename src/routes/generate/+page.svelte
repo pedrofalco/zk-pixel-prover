@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { tick } from 'svelte';
     import Button from '$lib/components/ui/Button.svelte';
     import ErrorAlert from '$lib/components/ui/ErrorAlert.svelte';
     import ProofResultCard from '$lib/components/ProofResultCard.svelte';
@@ -49,8 +50,16 @@
                 imageData.pixels,
                 imageData.hash,
                 (loading) => { generatingProof = loading; },
-                (err) => { error = err; scrollToElement(errorElement); },
-                (res) => { result = res; scrollToElement(resultElement); }
+                async (err) => { 
+                    error = err; 
+                    await tick();
+                    scrollToElement(errorElement); 
+                },
+                async (res) => { 
+                    result = res; 
+                    await tick(); // Wait for DOM to update
+                    scrollToElement(resultElement); 
+                }
             );
         } else {
             const normalizedHash = imageData.hash.startsWith('0x')
@@ -61,8 +70,16 @@
                 imageData.pixels,
                 normalizedHash,
                 (loading) => { generatingProof = loading; },
-                (err) => { error = err; scrollToElement(errorElement); },
-                (res) => { result = res; scrollToElement(resultElement); }
+                async (err) => { 
+                    error = err; 
+                    await tick();
+                    scrollToElement(errorElement); 
+                },
+                async (res) => { 
+                    result = res; 
+                    await tick(); // Wait for DOM to update
+                    scrollToElement(resultElement); 
+                }
             );
         }
     }
