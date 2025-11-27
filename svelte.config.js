@@ -9,7 +9,7 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			// Don't externalize @aztec/bb.js so WASM files are included
+			// Don't externalize packages so they use node_modules in runtime
 			external: []
 		})
 	}

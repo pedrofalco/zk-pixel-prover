@@ -9,7 +9,7 @@
   node_bundler = "esbuild"
   included_files = [
     "node_modules/@aztec/bb.js/dest/node/barretenberg_wasm/barretenberg-threads.wasm.gz",
-    "node_modules/@noir-lang/noirc_abi/nodejs/noirc_abi_wasm_bg.wasm",
-    "node_modules/@noir-lang/acvm_js/nodejs/acvm_js_bg.wasm"
+    "node_modules/@noir-lang/noirc_abi/nodejs/**",
+    "node_modules/@noir-lang/acvm_js/nodejs/**"
   ]
 
