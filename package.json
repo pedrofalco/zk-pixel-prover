@@ -39,6 +39,8 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"@aztec/bb.js": "^3.0.0-nightly.20251104",
+		"@noir-lang/noir_js": "^1.0.0-beta.15",
 		"circomlib": "^2.0.5",
 		"circomlibjs": "^0.1.7",
 		"lucide-svelte": "^0.554.0",
