@@ -53,10 +53,10 @@
         }
 
         if (proofSystem === 'groth16') {
-            await handleVerifyProof(
-                proofData?.proof,
-                proofData?.publicSignals,
-                (loading) => { verifyingProof = loading; },
+        await handleVerifyProof(
+            proofData?.proof,
+            proofData?.publicSignals,
+            (loading) => { verifyingProof = loading; },
                 async (err) => { 
                     error = err; 
                     await tick();

@@ -27,7 +27,7 @@ export async function generatePlonkProof(pixels: number[], hash: string): Promis
     if (!response.ok) {
         let errorMessage = 'Failed to generate PLONK proof';
         try {
-            const errorData = await response.json();
+        const errorData = await response.json();
             errorMessage = errorData.message || errorData.error || errorMessage;
         } catch (e) {
             // If response is not JSON, try to get text
@@ -84,7 +84,7 @@ export async function verifyPlonkProof(proof: any, publicSignals: string[]): Pro
     if (!response.ok) {
         let errorMessage = 'Failed to verify PLONK proof';
         try {
-            const errorData = await response.json();
+        const errorData = await response.json();
             errorMessage = errorData.message || errorData.error || errorMessage;
         } catch (e) {
             try {
@@ -101,7 +101,7 @@ export async function verifyPlonkProof(proof: any, publicSignals: string[]): Pro
     
     // Handle both response formats
     if (data.data) {
-        return data.data;
+    return data.data;
     } else {
         return {
             isValid: data.success || false,

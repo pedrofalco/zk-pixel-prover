@@ -22,7 +22,7 @@ export async function POST({ request, fetch }) {
     if (!proofBytesBase64) {
       throw new Error("Missing proof. Expected 'proofBytesBase64' or 'proof' field");
     }
-    
+
     if (typeof proofBytesBase64 !== "string") {
       throw new Error(`proofBytesBase64 must be string, got ${typeof proofBytesBase64}`);
     }
