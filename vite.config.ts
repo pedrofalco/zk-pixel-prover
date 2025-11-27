@@ -5,7 +5,7 @@ export default defineConfig({
 	plugins: [sveltekit()],
 	optimizeDeps: {
 		// Exclude packages that need WASM files from optimization
-		exclude: ['@aztec/bb.js', '@noir-lang/noir_js', '@noir-lang/noirc_abi', '@noir-lang/acvm_js']
+		exclude: ['@aztec/bb.js', '@noir-lang/noir_js']
 	},
 	ssr: {
 		// Key: make these packages external so they use node_modules in runtime
