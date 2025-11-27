@@ -7,7 +7,15 @@
 
 [functions]
   node_bundler = "esbuild"
+  external_node_modules = [
+    "@aztec/bb.js",
+    "@noir-lang/noir_js",
+    "@noir-lang/noirc_abi",
+    "@noir-lang/acvm_js"
+  ]
+  
   included_files = [
-    "node_modules/@aztec/bb.js/dest/node/barretenberg_wasm/barretenberg-threads.wasm.gz",
-    "node_modules/@noir-lang/noirc_abi/nodejs/noirc_abi_wasm_bg.wasm",
+    "node_modules/@aztec/bb.js/dest/node/barretenberg_wasm/**",
+    "node_modules/@noir-lang/noirc_abi/nodejs/**",
+    "node_modules/@noir-lang/acvm_js/nodejs/**"
   ]
