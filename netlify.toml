@@ -15,6 +15,7 @@
   ]
   
   included_files = [
+    # WASM files from node_modules
     "node_modules/@aztec/bb.js/dest/node/barretenberg_wasm/**",
     "node_modules/@noir-lang/noirc_abi/nodejs/**",
     "node_modules/@noir-lang/acvm_js/nodejs/**"

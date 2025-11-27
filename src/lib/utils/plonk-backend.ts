@@ -1,8 +1,7 @@
 // src/lib/utils/plonk-backend.ts
-import { readFileSync } from "fs";
 import { Noir } from "@noir-lang/noir_js";
 import { UltraHonkBackend } from "@aztec/bb.js";
-import { getNoirCircuitPath } from "./noir-circuit-paths";
+import circuit from "$lib/circuits/plonk/plonk.json";
 
 let cachedCircuit: any | null = null;
 let noirInstance: Noir | null = null;
@@ -10,8 +9,8 @@ let backendInstance: UltraHonkBackend | null = null;
 
 function loadCircuitJson() {
   if (!cachedCircuit) {
-    const circuitPath = getNoirCircuitPath("plonk/plonk.json");
-    cachedCircuit = JSON.parse(readFileSync(circuitPath, "utf-8"));
+    // Import circuit directly - SvelteKit embeds it in server bundle automatically
+    cachedCircuit = circuit;
   }
   return cachedCircuit;
 }
