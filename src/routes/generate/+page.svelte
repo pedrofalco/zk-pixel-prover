@@ -11,7 +11,7 @@
     import ReferenceImageDownload from '$lib/components/ReferenceImageDownload.svelte';
     import ProofSystemToggle from '$lib/components/ProofSystemToggle.svelte';
     import { scrollToElement } from '$lib/utils/scroll';
-    import { downloadJSON } from '$lib/utils/download';
+    import { downloadProof } from '$lib/utils/download';
     import { handleGenerateProof } from '$lib/utils/groth16-proof';
     import { handleGeneratePlonkProof } from '$lib/utils/plonk-proof';
     import type { ProofResult } from '$lib/utils/groth16-api';
@@ -84,11 +84,6 @@
         }
     }
 
-    function downloadProof() {
-        if (!result) return;
-        const filename = proofSystem === 'groth16' ? 'proof.json' : 'plonk-proof.json';
-        downloadJSON(result, filename);
-    }
 </script>
 
 <div class="min-h-screen flex flex-col items-center justify-center p-4 text-black font-mono">
@@ -173,7 +168,7 @@
     <ErrorAlert bind:error bind:element={errorElement} />
 
     {#if result}
-        <ProofResultCard {result} bind:element={resultElement} onDownload={downloadProof} />
+        <ProofResultCard {result} bind:element={resultElement} onDownload={() => downloadProof(result, proofSystem)} />
     {/if}
 </div>
 
