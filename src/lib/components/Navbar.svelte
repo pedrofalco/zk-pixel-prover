@@ -2,7 +2,7 @@
     import { page } from '$app/stores';
 </script>
 
-<nav class="w-full bg-white/10 backdrop-blur-lg border-b border-white/20 font-mono">
+<nav class="w-full font-mono">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
         <a href="/" class="text-xl font-bold text-black hover:opacity-80 transition-opacity">
             ZK Pixel Signature

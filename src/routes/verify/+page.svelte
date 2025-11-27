@@ -16,7 +16,7 @@
     import type { VerificationResult } from '$lib/utils/groth16-api';
     import type { PlonkVerificationResult } from '$lib/utils/plonk-api';
     
-    let proofSystem: 'groth16' | 'plonk' = 'groth16';
+    let proofSystem: 'groth16' | 'plonk' = 'plonk';
     let verifyingProof = false;
     let error: string | null = null;
     let verificationResult: VerificationResult | PlonkVerificationResult | null = null;
