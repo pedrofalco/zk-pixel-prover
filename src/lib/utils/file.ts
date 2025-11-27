@@ -2,7 +2,7 @@
  * Utility functions for file handling
  */
 
-export async function loadProofFile(file: File): Promise<{ proof: any; publicSignals: any }> {
+export async function loadProofFile(file: File): Promise<any> {
     if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
         throw new Error('Please upload a JSON file');
     }

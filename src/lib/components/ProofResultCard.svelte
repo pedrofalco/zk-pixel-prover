@@ -1,7 +1,7 @@
 <script lang="ts">
     import CodeBlock from './CodeBlock.svelte';
     
-    export let result: { proof: any; publicSignals: any };
+    export let result: Record<string, any>;
     export let element: HTMLElement | null = null;
     export let onDownload: (() => void) | null = null;
 </script>

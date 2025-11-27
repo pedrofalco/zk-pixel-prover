@@ -12,7 +12,13 @@
                 href="/"
                 class="px-4 py-2 rounded-xs font-semibold transition-colors border-2 border-black {$page.url.pathname === '/' ? 'bg-black text-white' : 'bg-transparent text-black hover:bg-black/10'}"
             >
-                Generate
+                Groth16
+            </a>
+            <a
+                href="/plonk"
+                class="px-4 py-2 rounded-xs font-semibold transition-colors border-2 border-black {$page.url.pathname === '/plonk' || $page.url.pathname.startsWith('/plonk/') ? 'bg-black text-white' : 'bg-transparent text-black hover:bg-black/10'}"
+            >
+                PLONK
             </a>
             <a
                 href="/verify"
