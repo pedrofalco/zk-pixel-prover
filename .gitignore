@@ -29,5 +29,10 @@ public.json
 witness.wtns
 *.wtns
 
+# Generated input files
+static/input.json
+plonk/pixels.json
+plonk/Prover.toml
+
 # Noir/PLONK compiled files
 plonk/target/
