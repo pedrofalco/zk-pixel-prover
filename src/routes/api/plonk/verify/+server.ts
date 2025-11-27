@@ -1,6 +1,7 @@
 // src/routes/api/plonk/verify/+server.ts
 import { json, error } from "@sveltejs/kit";
 import { verifyNoirProof } from "$lib/utils/plonk-backend";
+import { REFERENCE_HASH } from "$lib/utils/reference-hash";
 
 export async function POST({ request, fetch }) {
   try {
@@ -34,14 +35,8 @@ export async function POST({ request, fetch }) {
     // Normalize publicInputs to array
     const normalizedInputs = Array.isArray(publicInputs) ? publicInputs : [publicInputs];
     
-    // Get the reference image hash (the fixed image we're verifying against)
-    console.log("[plonk/verify] Fetching reference hash...");
-    const referenceResponse = await fetch('/api/reference-hash');
-    if (!referenceResponse.ok) {
-      throw new Error('Failed to load reference image hash');
-    }
-    const referenceData = await referenceResponse.json();
-    const referenceHash = referenceData.data.hash;
+    // Use the pre-calculated reference hash (constant, no need to fetch)
+    const referenceHash = REFERENCE_HASH;
     console.log("[plonk/verify] Reference hash:", referenceHash);
 
     // Verify the proof mathematically

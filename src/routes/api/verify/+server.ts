@@ -3,18 +3,14 @@ import * as snarkjs from 'snarkjs';
 import { error } from '@sveltejs/kit';
 import { readFileSync } from 'fs';
 import { getCircuitPath } from '$lib/utils/circuit-paths';
+import { REFERENCE_HASH } from '$lib/utils/reference-hash';
 
 export async function POST({ request, fetch }) {
     try {
         const { proof, publicSignals } = await request.json();
         
-        // Get the reference image hash (the fixed image we're verifying against)
-        const referenceResponse = await fetch('/api/reference-hash');
-        if (!referenceResponse.ok) {
-            throw new Error('Failed to load reference image hash');
-        }
-        const referenceData = await referenceResponse.json();
-        const referenceHash = referenceData.data.hash;
+        // Use the pre-calculated reference hash (constant, no need to fetch)
+        const referenceHash = REFERENCE_HASH;
         
         // Resolve path for both development and production
         const vKeyPath = getCircuitPath('circuits/keys/verification_key.json');
