@@ -1,5 +1,5 @@
 <script lang="ts">
-    import CodeBlock from './CodeBlock.svelte';
+    import CodeBlock from './ui/CodeBlock.svelte';
     
     export let result: Record<string, any>;
     export let element: HTMLElement | null = null;

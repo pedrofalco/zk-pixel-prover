@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Copy, Check } from 'lucide-svelte';
-    import { copyToClipboard } from '../utils/clipboard';
+    import { copyToClipboard } from '../../utils/clipboard';
     import { writable } from 'svelte/store';
     
     export let code: string;

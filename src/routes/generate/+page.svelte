@@ -1,11 +1,11 @@
 <script lang="ts">
-    import Button from '$lib/components/Button.svelte';
-    import ErrorAlert from '$lib/components/ErrorAlert.svelte';
+    import Button from '$lib/components/ui/Button.svelte';
+    import ErrorAlert from '$lib/components/ui/ErrorAlert.svelte';
     import ProofResultCard from '$lib/components/ProofResultCard.svelte';
-    import ImageUpload from '$lib/components/ImageUpload.svelte';
+    import ImageUpload from '$lib/components/ui/ImageUpload.svelte';
     import PageHeader from '$lib/components/PageHeader.svelte';
-    import InfoCard from '$lib/components/InfoCard.svelte';
-    import ContentCard from '$lib/components/ContentCard.svelte';
+    import InfoCard from '$lib/components/ui/InfoCard.svelte';
+    import ContentCard from '$lib/components/ui/ContentCard.svelte';
     import ProcessedImageDisplay from '$lib/components/ProcessedImageDisplay.svelte';
     import ReferenceImageDownload from '$lib/components/ReferenceImageDownload.svelte';
     import ProofSystemToggle from '$lib/components/ProofSystemToggle.svelte';
