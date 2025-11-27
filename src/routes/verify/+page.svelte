@@ -8,6 +8,7 @@
     import InfoCard from '$lib/components/ui/InfoCard.svelte';
     import ContentCard from '$lib/components/ui/ContentCard.svelte';
     import ProofSystemToggle from '$lib/components/ProofSystemToggle.svelte';
+    import ProofSystemInfo from '$lib/components/ui/ProofSystemInfo.svelte';
     import { scrollToElement } from '$lib/utils/scroll';
     import { loadProofFile } from '$lib/utils/file';
     import { handleVerifyProof } from '$lib/utils/groth16-proof';
@@ -102,19 +103,7 @@
             <div class="space-y-4 leading-relaxed">
                 <ProofSystemToggle system={proofSystem} onSystemChange={handleSystemChange} />
                 
-                {#if proofSystem === 'groth16'}
-                    <div class="p-3 bg-blue-50 border-l-4 border-blue-500 rounded-xs">
-                        <p class="text-sm text-blue-900">
-                            <strong>🔷 Groth16 Mode:</strong> Verifying a proof generated with Circom + SnarkJS (Groth16).
-                        </p>
-                    </div>
-                {:else}
-                    <div class="p-3 bg-purple-50 border-l-4 border-purple-500 rounded-xs">
-                        <p class="text-sm text-purple-900">
-                            <strong>🔶 PLONK Mode:</strong> Verifying a proof generated with Noir + Barretenberg (PLONK).
-                        </p>
-                    </div>
-                {/if}
+                <ProofSystemInfo system={proofSystem} context="verify" />
                 
                 <p>
                     Upload a <code class="bg-black/20 px-2 py-1 rounded">{proofSystem === 'groth16' ? 'proof.json' : 'plonk-proof.json'}</code> file to verify 
