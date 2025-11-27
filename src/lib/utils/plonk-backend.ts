@@ -1,6 +1,8 @@
 // src/lib/utils/plonk-backend.ts
 import { Noir } from "@noir-lang/noir_js";
 import { UltraHonkBackend } from "@aztec/bb.js";
+import { mkdirSync } from "fs";
+import { join } from "path";
 import circuit from "$lib/circuits/plonk/plonk.json";
 
 let cachedCircuit: any | null = null;
@@ -52,7 +54,26 @@ async function getBackendInstance() {
       console.log("[noir-proof] Initializing backend instance...");
       const circuitJson = loadCircuitJson();
       const bytecode = circuitJson.bytecode ?? circuitJson;
-      console.log("[noir-proof] Creating UltraHonkBackend...");
+      
+      // Configure CRS path to use /tmp in serverless environments (Netlify)
+      // /tmp is writable in Netlify serverless functions
+      // UltraHonkBackend uses process.env.CRS_PATH or defaults to homedir()/.bb-crs
+      const crsPath = process.env.TMPDIR || process.env.TMP || '/tmp';
+      const crsDir = join(crsPath, '.bb-crs');
+      
+      // Set CRS_PATH environment variable before creating backend
+      // This is how @aztec/bb.js determines where to store CRS files
+      process.env.CRS_PATH = crsDir;
+      
+      // Ensure the directory exists (mkdirSync is safe - won't error if exists)
+      try {
+        mkdirSync(crsDir, { recursive: true });
+        console.log("[noir-proof] CRS directory ready:", crsDir);
+      } catch (mkdirError: any) {
+        console.warn("[noir-proof] Could not create CRS directory (may already exist):", mkdirError?.message);
+      }
+      
+      console.log("[noir-proof] Creating UltraHonkBackend with CRS_PATH:", process.env.CRS_PATH);
       backendInstance = new UltraHonkBackend(bytecode);
       console.log("[noir-proof] Backend instance initialized successfully");
     } catch (error: any) {
