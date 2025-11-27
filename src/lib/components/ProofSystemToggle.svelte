@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let system: 'groth16' | 'plonk' = 'groth16';
+    export let system: 'groth16' | 'plonk' = 'plonk';
     export let onSystemChange: (system: 'groth16' | 'plonk') => void;
 </script>
 

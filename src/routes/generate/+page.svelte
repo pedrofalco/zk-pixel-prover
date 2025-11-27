@@ -18,7 +18,7 @@
     import type { ProofResult } from '$lib/utils/groth16-api';
     import type { PlonkProofResult } from '$lib/utils/plonk-api';
     
-    let proofSystem: 'groth16' | 'plonk' = 'groth16';
+    let proofSystem: 'groth16' | 'plonk' = 'plonk';
     let generatingProof = false;
     let error: string | null = null;
     let result: ProofResult | PlonkProofResult | null = null;
