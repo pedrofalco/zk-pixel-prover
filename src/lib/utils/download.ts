@@ -39,3 +39,12 @@ export async function downloadImage(imagePath: string, filename: string, errorMe
     }
 }
 
+/**
+ * Download a proof file with appropriate filename based on proof system
+ */
+export function downloadProof(result: any, proofSystem: 'groth16' | 'plonk' = 'groth16'): void {
+    if (!result) return;
+    const filename = proofSystem === 'groth16' ? 'proof.json' : 'plonk-proof.json';
+    downloadJSON(result, filename);
+}
+

@@ -18,6 +18,7 @@
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@sveltejs/adapter-auto": "^4.0.0",
+		"@sveltejs/adapter-netlify": "^5.2.4",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@types/node": "^24.10.1",
@@ -39,6 +40,8 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"@aztec/bb.js": "^3.0.0-nightly.20251104",
+		"@noir-lang/noir_js": "^1.0.0-beta.15",
 		"circomlib": "^2.0.5",
 		"circomlibjs": "^0.1.7",
 		"lucide-svelte": "^0.554.0",
