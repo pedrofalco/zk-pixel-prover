@@ -7,7 +7,7 @@ function verifyCircuit() {
     console.log('🔍 Verifying Noir circuit setup...\n');
     
     // Check if plonk.json exists in target
-    const targetPath = join(process.cwd(), 'plonk', 'target', 'plonk.json');
+    const targetPath = join(process.cwd(), 'src', 'lib', 'plonk', 'target', 'plonk.json');
     const staticPath = join(process.cwd(), 'static', 'circuits', 'plonk', 'plonk.json');
     
     let circuitPath = null;
@@ -16,7 +16,7 @@ function verifyCircuit() {
     try {
       circuitJson = JSON.parse(readFileSync(targetPath, 'utf-8'));
       circuitPath = targetPath;
-      console.log('✅ Found circuit in plonk/target/plonk.json');
+      console.log('✅ Found circuit in src/lib/plonk/target/plonk.json');
     } catch (e) {
       try {
         circuitJson = JSON.parse(readFileSync(staticPath, 'utf-8'));
@@ -35,7 +35,7 @@ function verifyCircuit() {
     console.log('📋 Circuit keys:', Object.keys(circuitJson).slice(0, 10).join(', '), '...');
     
     // Check Prover.toml
-    const proverPath = join(process.cwd(), 'plonk', 'Prover.toml');
+    const proverPath = join(process.cwd(), 'src', 'lib', 'plonk', 'Prover.toml');
     try {
       const proverContent = readFileSync(proverPath, 'utf-8');
       console.log('\n✅ Prover.toml found');
@@ -52,8 +52,8 @@ function verifyCircuit() {
     
     console.log('\n✨ Circuit verification complete!');
     console.log('\n💡 If you\'re getting errors, try:');
-    console.log('   1. Recompile the circuit: cd plonk && nargo compile');
-    console.log('   2. Copy to static: cp plonk/target/plonk.json static/circuits/plonk/');
+    console.log('   1. Recompile the circuit: cd src/lib/plonk && nargo compile');
+    console.log('   2. Copy to static: cp src/lib/plonk/target/plonk.json static/circuits/plonk/');
     console.log('   3. Restart your dev server');
     
   } catch (error) {

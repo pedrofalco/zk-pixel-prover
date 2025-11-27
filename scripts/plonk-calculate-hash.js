@@ -5,7 +5,7 @@ import { join } from 'path';
 async function calculateHashAndGenerateProverToml() {
     try {
         // Read pixels from the temporary file
-        const pixelsPath = join(process.cwd(), 'plonk', 'pixels.json');
+        const pixelsPath = join(process.cwd(), 'src', 'lib', 'plonk', 'pixels.json');
         
         if (!fs.existsSync(pixelsPath)) {
             throw new Error('pixels.json not found. Please run plonk-process-image.js first.');
@@ -36,15 +36,15 @@ async function calculateHashAndGenerateProverToml() {
         const proverToml = `expected_hash = "${hashString}"
 pixels = [${pixels.join(', ')}]`;
 
-        // Write to plonk/Prover.toml
-        const proverTomlPath = join(process.cwd(), 'plonk', 'Prover.toml');
+        // Write to src/lib/plonk/Prover.toml
+        const proverTomlPath = join(process.cwd(), 'src', 'lib', 'plonk', 'Prover.toml');
         fs.writeFileSync(proverTomlPath, proverToml);
         
         console.log('\n✅ Generated Prover.toml at:', proverTomlPath);
         console.log('\n📝 Prover.toml content:');
         console.log(proverToml);
         console.log('\n✨ You can now run:');
-        console.log('   cd plonk');
+        console.log('   cd src/lib/plonk');
         console.log('   nargo execute');
         
     } catch (error) {

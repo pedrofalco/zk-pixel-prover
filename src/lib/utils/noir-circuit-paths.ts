@@ -17,8 +17,8 @@ export function getNoirCircuitPath(relativePath: string): string {
         return staticPath;
     }
     
-    // Fallback to plonk/target/ (development)
-    const plonkPath = join(cwd, 'plonk', 'target', cleanPath);
+    // Fallback to src/lib/plonk/target/ (development)
+    const plonkPath = join(cwd, 'src', 'lib', 'plonk', 'target', cleanPath);
     if (existsSync(plonkPath)) {
         return plonkPath;
     }

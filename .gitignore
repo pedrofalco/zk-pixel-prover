@@ -31,8 +31,9 @@ witness.wtns
 
 # Generated input files
 static/input.json
-plonk/pixels.json
-plonk/Prover.toml
+src/lib/plonk/pixels.json
+src/lib/plonk/Prover.toml
 
 # Noir/PLONK compiled files
-plonk/target/
+src/lib/plonk/target/
+

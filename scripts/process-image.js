@@ -65,7 +65,7 @@ async function processImage(imagePath, system = 'groth16') {
         output = { pixels, hash: 0 };
         nextStep = '💡 Next step: Run groth16-calculate-hash.js to calculate hash';
     } else if (system === 'plonk') {
-        outputPath = join(process.cwd(), 'plonk', 'pixels.json');
+        outputPath = join(process.cwd(), 'src', 'lib', 'plonk', 'pixels.json');
         output = { pixels };
         nextStep = '💡 Next step: Run plonk-calculate-hash.js to calculate hash and generate Prover.toml';
     } else {

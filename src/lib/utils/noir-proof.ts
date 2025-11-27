@@ -203,7 +203,7 @@ export async function generateNoirProof(
 Please ensure:
 - pixels is an array of exactly 48 BigInt values
 - expected_hash is a single BigInt value
-- The circuit has been compiled with: cd plonk && nargo compile
+- The circuit has been compiled with: cd src/lib/plonk && nargo compile
 
 Original error: ${errorMsg}`;
       }
