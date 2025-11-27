@@ -28,6 +28,21 @@ export default defineConfig({
 						console.warn(`⚠️  WASM file not found: ${src}`);
 					}
 				});
+				
+				// Also copy to .netlify/server directory if it exists (for serverless functions)
+				const netlifyServerPath = join('.netlify', 'server');
+				if (existsSync(netlifyServerPath)) {
+					wasmFiles.forEach(file => {
+						const src = join(bbPath, file);
+						const dest = join(netlifyServerPath, 'barretenberg_wasm', file);
+						
+						if (existsSync(src)) {
+							mkdirSync(join(netlifyServerPath, 'barretenberg_wasm'), { recursive: true });
+							copyFileSync(src, dest);
+							console.log(`✅ Copied ${file} to .netlify/server/barretenberg_wasm/`);
+						}
+					});
+				}
 			}
 		}
 	],
