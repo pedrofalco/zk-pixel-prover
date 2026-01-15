@@ -173,6 +173,12 @@ PLONK is a universal zero-knowledge proof system implemented using Noir (circuit
    - **Solution**: Use JavaScript/TypeScript libraries (`@noir-lang/noir_js` and `@aztec/bb.js`) instead of CLI tools for proof generation. The JS libraries handle version compatibility internally and avoid these CLI-specific issues.
    
    **Current Status**: This project uses the JS libraries, so these CLI compatibility issues do not apply. The CLI is only used for circuit compilation (`nargo compile`), not for proof generation.
+   
+   **Note on CLI vs JS Libraries**: During development, we encountered compatibility issues with the CLI tools (`bb prove`). This led us to use the JavaScript libraries (`@noir-lang/noir_js` and `@aztec/bb.js`) instead, which turned out to be the standard approach for web applications. The CLI (`bb prove`) is primarily used for local development and testing, while JS libraries are the recommended approach for production web apps because they:
+   - Integrate seamlessly with web frameworks
+   - Handle version compatibility internally
+   - Are easier to deploy and maintain
+   - Are the officially recommended approach for web applications
 
 #### Compile the Circuit
 
