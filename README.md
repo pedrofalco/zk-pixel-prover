@@ -150,7 +150,29 @@ PLONK is a universal zero-knowledge proof system implemented using Noir (circuit
    ```bash
    npm install
    ```
-   This installs `@noir-lang/noir_js` and `@aztec/bb.js` for server-side proof operations.
+   
+   This installs the following packages for server-side proof operations:
+   - `@noir-lang/noir_js@1.0.0-beta.15` - Main interface for loading and executing Noir circuits
+   - `@aztec/bb.js@3.0.0-nightly.20251104` - UltraHonk backend for generating/verifying proofs
+   
+   **Version Compatibility**: These versions are compatible and work together as recommended by the [official NoirJS documentation](https://noir-lang.org/docs/tutorials/noirjs_app). The documentation states: "In this guide, we will install versions pinned to 1.0.0-beta.15. These work with Barretenberg version 3.0.0-nightly.20251104, so we are using that one version too."
+   
+   **Note**: Since proof generation runs **server-side** (in API endpoints), we don't need browser polyfills like `buffer` or `vite-plugin-node-polyfills`. Node.js already provides these APIs natively.
+   
+   **Known Compatibility Issues (CLI only)**: 
+   
+   If you encounter compatibility issues, they are likely related to the CLI tools (`nargo`/`bb`) used for circuit compilation, not the JavaScript libraries. The JS libraries (`@noir-lang/noir_js` and `@aztec/bb.js`) are designed to work together and handle version compatibility internally.
+   
+   **CLI Version Conflicts (Historical)**:
+   - **Problem**: When using CLI tools (`nargo` and `bb`), there were version incompatibility issues
+   - **Affected Versions**: 
+     - `nargo` 1.0.0-beta.15 with certain `bb` versions
+     - Recommended CLI combination was `nargo` 1.0.0-beta.3 with `bb` 0.82.2
+   - **Error**: `bb prove` would fail with conversion errors: `Assertion failed: (uint256_t(fr_vec[1]) < ...) Conversion error here usually implies some bad proof serde or parsing`
+   - **Root Cause**: Serialization/deserialization incompatibility between `nargo` and `bb` CLI versions
+   - **Solution**: Use JavaScript/TypeScript libraries (`@noir-lang/noir_js` and `@aztec/bb.js`) instead of CLI tools for proof generation. The JS libraries handle version compatibility internally and avoid these CLI-specific issues.
+   
+   **Current Status**: This project uses the JS libraries, so these CLI compatibility issues do not apply. The CLI is only used for circuit compilation (`nargo compile`), not for proof generation.
 
 #### Compile the Circuit
 
@@ -218,7 +240,7 @@ The PLONK backend (`src/lib/utils/plonk-backend.ts`) handles:
 5. **Proof Generation**: Uses backend to generate PLONK proof
 6. **Proof Verification**: Uses backend to verify proof mathematically
 
-**Note**: The backend runs **server-side only** (in API endpoints). The circuit JSON is embedded in the server bundle and not sent to the client.
+**Note**: The backend runs **server-side only** (in API endpoints). The circuit JSON is embedded in the server bundle and not sent to the client. This approach differs from the official NoirJS tutorial which targets browser/client-side execution. For server-side usage, we don't need polyfills or special Vite configuration.
 
 ## Groth16 (Circom + SnarkJS)
 

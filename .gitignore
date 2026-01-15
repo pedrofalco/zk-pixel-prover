@@ -37,3 +37,5 @@ src/lib/plonk/Prover.toml
 # Noir/PLONK compiled files
 src/lib/plonk/target/
 
+# Migration plan (internal documentation)
+MIGRATION-PLAN.md
