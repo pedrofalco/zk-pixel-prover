@@ -4,7 +4,7 @@
  * 
  * This is a client-side implementation for generating and verifying PLONK proofs
  * using Noir and Barretenberg in the browser. It's separate from the server-side
- * implementation in plonk-backend.ts (which remains as legacy code).
+ * implementation in legacy/plonk-backend.ts (which remains as legacy code).
  * 
  * Key differences from server-side:
  * - Initializes WASM modules for Noir and ACVM in the browser

@@ -1,4 +1,13 @@
-// src/lib/utils/plonk-backend.ts
+/**
+ * @deprecated This file is legacy code. Server-side PLONK proof generation has been
+ * migrated to client-side. See `plonk-client.ts` for the current implementation.
+ * 
+ * This file is kept for reference only and should not be used in new code.
+ * 
+ * Migration: Phase 2 (2024) - All PLONK operations now run in the browser.
+ */
+
+// src/lib/utils/plonk-backend.ts (LEGACY - Server-side implementation)
 import { Noir } from "@noir-lang/noir_js";
 import { UltraHonkBackend } from "@aztec/bb.js";
 import { mkdirSync } from "fs";
