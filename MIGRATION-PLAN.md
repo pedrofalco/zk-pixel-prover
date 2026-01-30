@@ -37,22 +37,24 @@ Migrate the application from a server-centralized model (web2) to a client-priva
 
 ### Phase 1: Move Image Processing to Client
 
-#### 1.1 Install dependencies for client-side processing
-```bash
-npm install browser-image-resizer
-# Or use native browser Canvas API
-```
+#### 1.1 Verify dependencies
+- **No new dependencies needed for image processing**: Use native browser Canvas API
+- **Hash calculation**: Use `circomlibjs` (already installed) - works for both Groth16 and PLONK
 
 #### 1.2 Create client-side processing utility
 **File**: `src/lib/utils/image-processing-client.ts`
-- Use Canvas API to resize image to 4x4
-- Extract RGB pixels directly in the browser
+- Use native Canvas API to:
+  - Load image from File
+  - Resize to 4x4 using `drawImage()` on a 4x4 canvas
+  - Extract RGB pixels using `getImageData()` (ignore alpha channel)
+- Calculate Poseidon hash using `circomlibjs` (same library used by both Groth16 and PLONK)
 - Don't send anything to the server
 
 #### 1.3 Update `image-processing.ts`
-- Change `processImageFile()` to process on client
+- Change `processImageFile()` to use client-side processing
 - Remove calls to `/api/process-image`
 - Remove calls to `/api/calculate-hash`
+- Use `circomlibjs` directly for hash calculation
 
 #### 1.4 Remove server endpoints
 - `src/routes/api/process-image/+server.ts` → **DELETE**

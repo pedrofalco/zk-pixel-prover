@@ -1,3 +1,41 @@
+/**
+ * ============================================================================
+ * ⚠️  DEPRECATED ENDPOINT - LEGACY CODE ⚠️
+ * ============================================================================
+ * 
+ * This endpoint is DEPRECATED and NO LONGER USED by the application.
+ * 
+ * **Migration Status**: Hash calculation has been moved to client-side
+ * (Phase 1 of migration to web3/privacy-first architecture).
+ * 
+ * **Why deprecated?**
+ * - Privacy: The server should NOT see user pixels or hash
+ * - Architecture: Moving to client-side processing aligns with web3 principles
+ * - Current implementation: Uses `circomlibjs` directly in the browser
+ * 
+ * **Current client-side implementation:**
+ * - File: `src/lib/utils/image-processing-client.ts`
+ * - Function: `calculatePoseidonHash()`
+ * - Uses `circomlibjs` (same library, now in browser)
+ * - Same algorithm: groups of 12, then combine 4 hashes
+ * 
+ * **Note on hash calculation:**
+ * - Both Groth16 and PLONK use `circomlibjs` to calculate hash BEFORE passing to circuit
+ * - PLONK circuit (Noir) VERIFIES the hash internally, but doesn't calculate it
+ * - The hash must match between JS (`circomlibjs`) and circuit (Noir's Poseidon)
+ * - Both are compatible (see comment in `src/lib/plonk/src/main.nr`)
+ * 
+ * **This endpoint is kept for:**
+ * - Historical reference
+ * - Potential rollback if needed
+ * - Understanding the migration path
+ * 
+ * **DO NOT USE** this endpoint in new code.
+ * Use `calculatePoseidonHash()` from `image-processing-client.ts` instead.
+ * 
+ * ============================================================================
+ */
+
 import { json } from '@sveltejs/kit';
 import { error } from '@sveltejs/kit';
 import { buildPoseidon } from 'circomlibjs';

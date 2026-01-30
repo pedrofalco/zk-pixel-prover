@@ -1,3 +1,34 @@
+/**
+ * ============================================================================
+ * ⚠️  DEPRECATED ENDPOINT - LEGACY CODE ⚠️
+ * ============================================================================
+ * 
+ * This endpoint is DEPRECATED and NO LONGER USED by the application.
+ * 
+ * **Migration Status**: Image processing has been moved to client-side
+ * (Phase 1 of migration to web3/privacy-first architecture).
+ * 
+ * **Why deprecated?**
+ * - Privacy: The server should NOT see user images or pixels
+ * - Architecture: Moving to client-side processing aligns with web3 principles
+ * - Current implementation: Uses Canvas API natively in the browser
+ * 
+ * **Current client-side implementation:**
+ * - File: `src/lib/utils/image-processing-client.ts`
+ * - Uses native Canvas API (no dependencies)
+ * - All processing happens in the browser
+ * 
+ * **This endpoint is kept for:**
+ * - Historical reference
+ * - Potential rollback if needed
+ * - Understanding the migration path
+ * 
+ * **DO NOT USE** this endpoint in new code.
+ * Use `processImageFileClient()` from `image-processing-client.ts` instead.
+ * 
+ * ============================================================================
+ */
+
 import { json } from '@sveltejs/kit';
 import { error } from '@sveltejs/kit';
 import sharp from 'sharp';

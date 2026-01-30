@@ -1,3 +1,36 @@
+/**
+ * ============================================================================
+ * ⚠️  DEPRECATED ENDPOINT - LEGACY CODE ⚠️
+ * ============================================================================
+ * 
+ * This endpoint is DEPRECATED and NO LONGER USED by the application.
+ * 
+ * **Migration Status**: PLONK proof generation has been moved to client-side
+ * (Phase 2 of migration to web3/privacy-first architecture).
+ * 
+ * **Why deprecated?**
+ * - Privacy: The server should NOT see user pixels, hash, or witness
+ * - Architecture: Moving to client-side processing aligns with web3 principles
+ * - Current implementation: Uses `plonk-backend-client.ts` in the browser
+ * 
+ * **Current client-side implementation:**
+ * - File: `src/lib/utils/plonk-client.ts`
+ * - Function: `generateNoirProofClient()`
+ * - Initializes WASM modules (Noir, ACVM, Barretenberg) in browser
+ * - Generates proof entirely on client
+ * - Uses Buffer polyfill for base64 encoding
+ * 
+ * **This endpoint is kept for:**
+ * - Historical reference
+ * - Potential rollback if needed
+ * - Understanding the migration path
+ * 
+ * **DO NOT USE** this endpoint in new code.
+ * Use `generatePlonkProof()` from `plonk-api.ts` instead, which calls the client-side backend.
+ * 
+ * ============================================================================
+ */
+
 // src/routes/api/plonk/proof/+server.ts
 import { json, error } from "@sveltejs/kit";
 import { generateNoirProof } from "$lib/utils/plonk-backend";
