@@ -10,7 +10,7 @@ import { buildPoseidon } from 'circomlibjs';
  * All processing happens in the browser - no server communication
  * 
  * @param file - Image file (JPEG, PNG, WebP, GIF)
- * @returns Object with pixels array (48 RGB values) and hash string
+ * @returns Object with pixels array (192 RGB values) and hash string
  */
 export async function processImageFileClient(file: File): Promise<{ pixels: number[]; hash: string }> {
     // Step 1: Validate file type
@@ -30,10 +30,10 @@ export async function processImageFileClient(file: File): Promise<{ pixels: numb
 
 /**
  * Extract RGB pixels from an image file using Canvas API
- * Resizes image to 4x4 and extracts RGB values (ignoring alpha channel)
+ * Resizes image to 8x8 and extracts RGB values (ignoring alpha channel)
  * 
  * @param file - Image file
- * @returns Array of 48 RGB values (16 pixels × 3 channels)
+ * @returns Array of 192 RGB values (64 pixels × 3 channels)
  */
 async function extractPixelsFromImage(file: File): Promise<number[]> {
     return new Promise((resolve, reject) => {
@@ -47,8 +47,8 @@ async function extractPixelsFromImage(file: File): Promise<number[]> {
             try {
                 // Create canvas element
                 const canvas = document.createElement('canvas');
-                canvas.width = 4;
-                canvas.height = 4;
+                canvas.width = 8;
+                canvas.height = 8;
                 
                 const ctx = canvas.getContext('2d');
                 if (!ctx) {
@@ -57,11 +57,11 @@ async function extractPixelsFromImage(file: File): Promise<number[]> {
                     return;
                 }
 
-                // Draw image resized to 4x4 (fill mode - stretches to fit exactly)
-                ctx.drawImage(img, 0, 0, 4, 4);
+                // Draw image resized to 8x8 (fill mode - stretches to fit exactly)
+                ctx.drawImage(img, 0, 0, 8, 8);
 
                 // Get image data (RGBA format)
-                const imageData = ctx.getImageData(0, 0, 4, 4);
+                const imageData = ctx.getImageData(0, 0, 8, 8);
                 const data = imageData.data; // Uint8ClampedArray: [R, G, B, A, R, G, B, A, ...]
 
                 // Extract RGB values (skip alpha channel)
@@ -76,9 +76,9 @@ async function extractPixelsFromImage(file: File): Promise<number[]> {
                 // Clean up object URL
                 URL.revokeObjectURL(objectUrl);
 
-                // Verify we got exactly 48 values (16 pixels × 3 channels)
-                if (pixels.length !== 48) {
-                    reject(new Error(`Expected 48 RGB values, got ${pixels.length}`));
+                // Verify we got exactly 192 values (64 pixels × 3 channels)
+                if (pixels.length !== 192) {
+                    reject(new Error(`Expected 192 RGB values, got ${pixels.length}`));
                     return;
                 }
 
@@ -104,24 +104,44 @@ async function extractPixelsFromImage(file: File): Promise<number[]> {
  * Uses the same algorithm as the server-side implementation
  * Matches both Groth16 and PLONK circuit structures
  * 
- * @param pixels - Array of 48 RGB values
+ * @param pixels - Array of 192 RGB values (8x8 = 64 pixels × 3 channels)
  * @returns Hash string
  */
 async function calculatePoseidonHash(pixels: number[]): Promise<string> {
-    if (!pixels || !Array.isArray(pixels) || pixels.length !== 48) {
-        throw new Error('Invalid pixels array. Expected 48 RGB values.');
+    if (!pixels || !Array.isArray(pixels) || pixels.length !== 192) {
+        throw new Error('Invalid pixels array. Expected 192 RGB values.');
     }
 
     // Build Poseidon instance (same as server-side)
     const poseidon = await buildPoseidon();
 
     // Calculate hash using Poseidon (matching circuit structure: groups of 12)
-    // Same algorithm used by both Groth16 and PLONK
+    // 192 values / 12 = 16 groups
     const hash1 = poseidon(pixels.slice(0, 12));
     const hash2 = poseidon(pixels.slice(12, 24));
     const hash3 = poseidon(pixels.slice(24, 36));
     const hash4 = poseidon(pixels.slice(36, 48));
-    const finalHash = poseidon([hash1, hash2, hash3, hash4]);
+    const hash5 = poseidon(pixels.slice(48, 60));
+    const hash6 = poseidon(pixels.slice(60, 72));
+    const hash7 = poseidon(pixels.slice(72, 84));
+    const hash8 = poseidon(pixels.slice(84, 96));
+    const hash9 = poseidon(pixels.slice(96, 108));
+    const hash10 = poseidon(pixels.slice(108, 120));
+    const hash11 = poseidon(pixels.slice(120, 132));
+    const hash12 = poseidon(pixels.slice(132, 144));
+    const hash13 = poseidon(pixels.slice(144, 156));
+    const hash14 = poseidon(pixels.slice(156, 168));
+    const hash15 = poseidon(pixels.slice(168, 180));
+    const hash16 = poseidon(pixels.slice(180, 192));
+    
+    // Level 2: Combine 16 hashes into 4 groups of 4
+    const level2_hash1 = poseidon([hash1, hash2, hash3, hash4]);
+    const level2_hash2 = poseidon([hash5, hash6, hash7, hash8]);
+    const level2_hash3 = poseidon([hash9, hash10, hash11, hash12]);
+    const level2_hash4 = poseidon([hash13, hash14, hash15, hash16]);
+    
+    // Final: Combine 4 hashes into 1 final hash
+    const finalHash = poseidon([level2_hash1, level2_hash2, level2_hash3, level2_hash4]);
     const hashString = poseidon.F.toString(finalHash);
 
     return hashString;

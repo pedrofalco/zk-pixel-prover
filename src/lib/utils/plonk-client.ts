@@ -19,7 +19,7 @@ import initNoirC from '@noir-lang/noirc_abi';
 import initACVM from '@noir-lang/acvm_js';
 import acvm from '@noir-lang/acvm_js/web/acvm_js_bg.wasm?url';
 import noirc from '@noir-lang/noirc_abi/web/noirc_abi_wasm_bg.wasm?url';
-import circuit from "$lib/circuits/plonk/plonk.json";
+import circuit from "$lib/circuits/plonk/plonk-8x8.json";
 
 /**
  * Convert Uint8Array to base64 string (browser-native, no Buffer needed)
@@ -207,9 +207,9 @@ export async function generateNoirProofClient(
     // 2) Generate witness
     console.log("[noir-client] Step 2: Executing circuit to generate witness...");
     
-    // Validate inputs
-    if (pixels.length !== 48) {
-      throw new Error(`Expected 48 pixels, got ${pixels.length}`);
+    // Validate inputs (8x8 = 64 pixels × 3 channels = 192 values)
+    if (pixels.length !== 192) {
+      throw new Error(`Expected 192 pixels, got ${pixels.length}`);
     }
     
     const validPixels = pixels.map((p, i) => {
@@ -232,7 +232,7 @@ export async function generateNoirProofClient(
       pixelsLength: inputs.pixels.length,
       expected_hash: inputs.expected_hash.toString(),
       firstPixel: inputs.pixels[0]?.toString(),
-      lastPixel: inputs.pixels[47]?.toString()
+      lastPixel: inputs.pixels[191]?.toString()
     });
 
     let witness;
@@ -274,7 +274,7 @@ export async function generateNoirProofClient(
 3. There's an issue with the Noir initialization
 
 Please ensure:
-- pixels is an array of exactly 48 BigInt values
+- pixels is an array of exactly 192 BigInt values (8x8 = 64 pixels × 3 channels)
 - expected_hash is a single BigInt value
 - The circuit has been compiled with: cd src/lib/plonk && nargo compile
 

@@ -12,7 +12,7 @@ import { processImageFileClient } from './image-processing-client';
  * All processing happens client-side - no data is sent to the server
  * 
  * @param file - Image file (JPEG, PNG, WebP, GIF)
- * @returns Object with pixels array (48 RGB values) and hash string
+ * @returns Object with pixels array (192 RGB values) and hash string
  */
 export async function processImageFile(file: File): Promise<{ pixels: number[]; hash: string }> {
     // Use client-side processing (privacy-first: server never sees the image)
