@@ -355,21 +355,48 @@ export async function verifyNoirProofClient(
   proofBytesBase64: string,
   publicInputsStrings: string[]
 ) {
-  const backend = await getBackendInstance();
+  try {
+    console.log("[noir-client] Starting proof verification...");
+    console.log("[noir-client] Inputs:", {
+      proofLength: proofBytesBase64.length,
+      publicInputsCount: publicInputsStrings.length
+    });
 
-  // 1) Deserialize bytes (using browser-native APIs)
-  const proofBytes = base64ToUint8Array(proofBytesBase64);
+    // 1) Get backend instance
+    console.log("[noir-client] Step 1: Getting backend instance...");
+    const backend = await getBackendInstance();
+    console.log("[noir-client] Backend instance created");
 
-  // 2) Deserialize Public Inputs
-  const publicInputs = publicInputsStrings.map((p) => BigInt(p));
+    // 2) Deserialize bytes (using browser-native APIs)
+    console.log("[noir-client] Step 2: Deserializing proof bytes...");
+    const proofBytes = base64ToUint8Array(proofBytesBase64);
+    console.log("[noir-client] Proof bytes deserialized, length:", proofBytes.length);
 
-  // 3) Reconstruct proof object in the exact format expected by bb.js
-  const proof = {
-    proof: proofBytes,        // Uint8Array
-    publicInputs              // bigint[]
-  } as any;
+    // 3) Deserialize Public Inputs
+    console.log("[noir-client] Step 3: Deserializing public inputs...");
+    const publicInputs = publicInputsStrings.map((p) => BigInt(p));
+    console.log("[noir-client] Public inputs deserialized, count:", publicInputs.length);
 
-  // 4) Verify
-  const ok = await backend.verifyProof(proof);
-  return ok;
+    // 4) Reconstruct proof object in the exact format expected by bb.js
+    console.log("[noir-client] Step 4: Reconstructing proof object...");
+    const proof = {
+      proof: proofBytes,        // Uint8Array
+      publicInputs              // bigint[]
+    } as any;
+    console.log("[noir-client] Proof object reconstructed");
+
+    // 5) Verify
+    console.log("[noir-client] Step 5: Verifying proof...");
+    const ok = await backend.verifyProof(proof);
+    console.log("[noir-client] Verification result:", ok);
+    
+    return ok;
+  } catch (error: any) {
+    console.error("[noir-client] Verification failed:", {
+      message: error?.message,
+      stack: error?.stack,
+      name: error?.name
+    });
+    throw error;
+  }
 }
