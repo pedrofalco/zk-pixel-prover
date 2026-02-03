@@ -73,15 +73,20 @@ zk-img/
 │   │   ├── components/        # Svelte components
 │   │   │   └── ui/           # Reusable UI components
 │   │   └── utils/            # Utility functions
-│   │       ├── plonk-backend.ts    # PLONK proof generation/verification
-│   │       ├── groth16-proof.ts    # Groth16 frontend handlers
-│   │       ├── plonk-proof.ts      # PLONK frontend handlers
-│   │       └── reference-hash.ts   # Pre-calculated reference hash
+│   │       ├── plonk-client.ts         # PLONK client-side proof generation/verification
+│   │       ├── image-processing-client.ts  # Client-side image processing and hashing
+│   │       ├── image-processing.ts     # Image processing wrapper
+│   │       ├── groth16-proof.ts        # Groth16 frontend handlers
+│   │       ├── plonk-proof.ts          # PLONK frontend handlers
+│   │       ├── legacy/
+│   │       │   └── plonk-backend.ts    # Legacy server-side PLONK backend (deprecated)
+│   │       └── reference-hash.ts       # Pre-calculated reference hash
 │   └── routes/
 │       ├── generate/         # Proof generation page
 │       ├── verify/           # Proof verification page
 │       └── api/
-│           ├── plonk/        # PLONK API endpoints
+│           ├── plonk/
+│           │   └── verify/   # PLONK verification endpoint (legacy)
 │           └── proof/        # Groth16 API endpoints
 ├── scripts/                  # Development scripts
 │   ├── process-image.js      # Common image processing
@@ -95,11 +100,11 @@ zk-img/
 ### Data Flow
 
 1. **Image Upload**: User uploads an image via the web interface
-2. **Image Processing**: Image is resized to 4x4 pixels, RGB values extracted (48 values)
-3. **Hash Calculation**: Poseidon hash is computed from the 48 pixel values
-4. **Proof Generation**: Zero-knowledge proof is generated (server-side)
+2. **Image Processing**: Image is resized to 4x4 pixels, RGB values extracted (48 values) - **client-side**
+3. **Hash Calculation**: Poseidon hash is computed from the 48 pixel values - **client-side**
+4. **Proof Generation**: Zero-knowledge proof is generated - **client-side** (PLONK) or **server-side** (Groth16)
 5. **Proof Download**: User downloads the proof as JSON
-6. **Proof Verification**: User uploads proof, system verifies it matches the reference image
+6. **Proof Verification**: User uploads proof, system verifies it - **client-side** (PLONK) or **server-side** (Groth16)
 
 ## PLONK (Noir + Barretenberg)
 
@@ -115,23 +120,27 @@ PLONK is a universal zero-knowledge proof system implemented using Noir (circuit
 2. **Compilation**: Noir circuit is compiled to ACIR (Abstract Circuit Intermediate Representation)
    - Output: `src/lib/circuits/plonk/plonk.json`
 
-3. **Proof Generation**: Server-side using `@aztec/bb.js` (UltraHonk backend)
+3. **Proof Generation**: **Client-side** using `@aztec/bb.js` (UltraHonk backend)
+   - All processing happens in the browser for privacy
    - Generates witness from inputs
    - Creates PLONK proof
    - Returns proof bytes and public inputs
 
-4. **Verification**: Server-side using the same backend
-   - Verifies proof mathematically
+4. **Verification**: **Client-side** using the same backend
+   - Verifies proof mathematically in the browser
    - Compares public hash with reference hash
+   - No server communication needed
 
 ### Important Files
 
 - **`src/lib/plonk/src/main.nr`**: Noir circuit source code
 - **`src/lib/plonk/Nargo.toml`**: Noir project configuration
-- **`src/lib/circuits/plonk/plonk.json`**: Compiled circuit (ACIR), directly imported by backend
-- **`src/lib/utils/plonk-backend.ts`**: Core PLONK proof generation and verification logic
-- **`src/routes/api/plonk/proof/+server.ts`**: API endpoint for proof generation
-- **`src/routes/api/plonk/verify/+server.ts`**: API endpoint for proof verification
+- **`src/lib/circuits/plonk/plonk.json`**: Compiled circuit (ACIR), imported by client-side code
+- **`src/lib/utils/plonk-client.ts`**: Client-side PLONK proof generation and verification
+- **`src/lib/utils/image-processing-client.ts`**: Client-side image processing and Poseidon hashing
+- **`src/lib/utils/plonk-api.ts`**: API layer that dynamically imports client-side code
+- **`src/lib/utils/legacy/plonk-backend.ts`**: Legacy server-side backend (deprecated)
+- **`src/routes/api/plonk/verify/+server.ts`**: Legacy verification endpoint (for compatibility)
 
 ### Setup Instructions
 
@@ -151,13 +160,14 @@ PLONK is a universal zero-knowledge proof system implemented using Noir (circuit
    npm install
    ```
    
-   This installs the following packages for server-side proof operations:
+   This installs the following packages for **client-side** proof operations:
    - `@noir-lang/noir_js@1.0.0-beta.15` - Main interface for loading and executing Noir circuits
    - `@aztec/bb.js@3.0.0-nightly.20251104` - UltraHonk backend for generating/verifying proofs
+   - `circomlibjs` - JavaScript library for Poseidon hash calculation
    
    **Version Compatibility**: These versions are compatible and work together as recommended by the [official NoirJS documentation](https://noir-lang.org/docs/tutorials/noirjs_app). The documentation states: "In this guide, we will install versions pinned to 1.0.0-beta.15. These work with Barretenberg version 3.0.0-nightly.20251104, so we are using that one version too."
    
-   **Note**: Since proof generation runs **server-side** (in API endpoints), we don't need browser polyfills like `buffer` or `vite-plugin-node-polyfills`. Node.js already provides these APIs natively.
+   **Note**: Proof generation now runs **client-side** (in the browser) for maximum privacy. The browser's native APIs (`Canvas`, `btoa`, `atob`) are used for image processing and base64 encoding, eliminating the need for Node.js-specific polyfills like `buffer`.
    
    **Known Compatibility Issues (CLI only)**: 
    
@@ -235,18 +245,25 @@ PLONK is a universal zero-knowledge proof system implemented using Noir (circuit
   node scripts/plonk-verify-setup.js
   ```
 
-### How the Backend Works
+### How the Client-Side Backend Works
 
-The PLONK backend (`src/lib/utils/plonk-backend.ts`) handles:
+The PLONK client (`src/lib/utils/plonk-client.ts`) handles all operations in the browser:
 
-1. **Circuit Loading**: Directly imports `plonk.json` from `src/lib/circuits/plonk/`
-2. **Noir Instance**: Initializes Noir with the compiled circuit
-3. **Backend Instance**: Creates `UltraHonkBackend` from `@aztec/bb.js`
-4. **Witness Generation**: Uses `noir.execute()` to generate witness from inputs
-5. **Proof Generation**: Uses backend to generate PLONK proof
-6. **Proof Verification**: Uses backend to verify proof mathematically
+1. **WASM Initialization**: Initializes Noir and Barretenberg WASM modules in the browser
+2. **Circuit Loading**: Imports `plonk.json` from `src/lib/circuits/plonk/`
+3. **Noir Instance**: Creates Noir instance with the compiled circuit
+4. **Backend Instance**: Creates `UltraHonkBackend` from `@aztec/bb.js`
+5. **Witness Generation**: Uses `noir.execute()` to generate witness from inputs
+6. **Proof Generation**: Generates PLONK proof entirely in the browser
+7. **Proof Verification**: Verifies proof mathematically in the browser
 
-**Note**: The backend runs **server-side only** (in API endpoints). The circuit JSON is embedded in the server bundle and not sent to the client. This approach differs from the official NoirJS tutorial which targets browser/client-side execution. For server-side usage, we don't need polyfills or special Vite configuration.
+**Privacy Benefits**: All sensitive data (pixels, witness) stays in the browser. Only the proof and public hash are ever exposed.
+
+**Image Processing**: The `image-processing-client.ts` module handles:
+- Image resizing using native Canvas API
+- RGB pixel extraction
+- Poseidon hash calculation using `circomlibjs`
+- All processing happens client-side without server communication
 
 ## Groth16 (Circom + SnarkJS)
 

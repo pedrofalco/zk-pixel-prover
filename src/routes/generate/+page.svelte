@@ -94,7 +94,7 @@
 
     <div class="w-full max-w-4xl mb-6">
         <ContentCard>
-            <div class="space-y-6 leading-relaxed">
+            <div class="space-y-4 leading-relaxed">
                 <ProofSystemToggle system={proofSystem} onSystemChange={handleSystemChange} />
                 
                 <ProofSystemInfo system={proofSystem} context="generate" />

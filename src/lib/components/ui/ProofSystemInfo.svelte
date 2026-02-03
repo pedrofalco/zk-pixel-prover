@@ -15,7 +15,7 @@
 </script>
 
 {#if system === 'groth16'}
-    <div class="p-3 bg-blue-50 border-l-4 border-blue-500 rounded-xs">
+    <div class="p-4 bg-blue-50 border-l-4 border-blue-500 rounded-xs">
         <p class="text-sm text-blue-900">
             <strong>🔷 Groth16:</strong> {messages.groth16[context]}
         </p>
