@@ -21,7 +21,7 @@
         </p>
     </div>
 {:else}
-    <div class="p-3 bg-purple-50 border-l-4 border-purple-500 rounded-xs">
+    <div class="p-4 bg-purple-50 border-l-4 border-purple-500 rounded-xs">
         <p class="text-sm text-purple-900">
             <strong>🔶 PLONK:</strong> {messages.plonk[context]}
         </p>

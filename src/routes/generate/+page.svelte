@@ -86,7 +86,7 @@
 
 </script>
 
-<div class="min-h-screen flex flex-col items-center justify-center p-4 text-black font-mono">
+<div class="min-h-screen flex flex-col items-center justify-center md:p-4 text-black font-mono">
     <PageHeader 
         title="Generate Zero-Knowledge Proof"
         description="Prove you know a specific image <strong>without revealing its pixels</strong>."

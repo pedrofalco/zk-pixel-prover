@@ -530,7 +530,6 @@ This approach is valuable when:
 - [ ] **Protection against replay attacks**: Add nonce/timestamp to proofs to make them unique and non-reusable (especially important for blockchain implementations)
 - [ ] **Hash privacy**: Implement commitment schemes to hide the hash until verification, preventing identification of the image being verified (critical for blockchain/public ledgers)
 - [ ] **Support for larger images**: Increase resolution from 4x4 to 8x8 or 16x16 pixels for more practical use cases
-- [ ] **Client-side testing**: Add frontend tests for proof generation and verification flows
 
 ## Resources
 

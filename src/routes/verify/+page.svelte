@@ -92,7 +92,7 @@
     }
 </script>
 
-<div class="min-h-screen flex flex-col items-center justify-center p-4 text-black font-mono">
+<div class="min-h-screen flex flex-col items-center justify-center md:p-4 text-black font-mono">
     <PageHeader 
         title="Verify Zero-Knowledge Proof"
         description="Upload a proof file to verify if it matches the <strong>reference image</strong>."

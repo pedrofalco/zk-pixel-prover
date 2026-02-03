@@ -3,7 +3,7 @@
     export let onSystemChange: (system: 'groth16' | 'plonk') => void;
 </script>
 
-<div class="flex items-center gap-4 p-4 bg-white/10 backdrop-blur-lg rounded-xs border border-white/20">
+<div class="flex flex-col md:flex-row items-center justify-between gap-4 md:p-4 bg-white/10 backdrop-blur-lg rounded-xs border border-white/20">
     <span class="text-sm font-semibold text-black/70">Proof System:</span>
     <div class="flex gap-2">
         <button

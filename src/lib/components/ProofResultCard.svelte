@@ -6,7 +6,7 @@
     export let onDownload: (() => void) | null = null;
 </script>
 
-<div bind:this={element} class="w-full max-w-4xl bg-white/15 backdrop-blur-lg rounded-xs p-6 mb-4 border border-white/20 shadow">
+<div bind:this={element} class="w-full max-w-4xl bg-white/15 backdrop-blur-lg rounded-xs p-4 md:p-6 mb-4 border border-white/20 md:shadow">
     <div class="flex items-start gap-3 mb-4">
         <div class="text-3xl">✅</div>
         <div class="flex-1">
