@@ -92,7 +92,7 @@
     }
 </script>
 
-<div class="min-h-screen flex flex-col items-center justify-center p-4 text-black font-mono">
+<div class="min-h-screen flex flex-col items-center justify-center md:p-4 text-black font-mono">
     <PageHeader 
         title="Verify Zero-Knowledge Proof"
         description="Upload a proof file to verify if it matches the <strong>reference image</strong>."
@@ -105,17 +105,17 @@
                 
                 <ProofSystemInfo system={proofSystem} context="verify" />
                 
-                <p>
-                    Upload a <code class="bg-black/20 px-2 py-1 rounded">{proofSystem === 'groth16' ? 'proof.json' : 'plonk-proof.json'}</code> file to verify 
-                    if it corresponds to the reference image (<strong>sample_4x4.jpeg</strong>).
-                </p>
+                <div class="text-sm text-gray-700 space-y-3">
+                    <p><strong>How to use:</strong></p>
+                    <ol class="list-decimal list-inside space-y-1 ml-2">
+                        <li>Upload a <code class="bg-black/20 px-1.5 py-0.5 rounded text-xs">{proofSystem === 'groth16' ? 'proof.json' : 'plonk-proof.json'}</code> file</li>
+                        <li>Click "Verify Proof"</li>
+                        <li>Check if it matches the reference image (<strong>sample_4x4.jpeg</strong>)</li>
+                    </ol>
+                    <p class="text-xs text-gray-600 italic">The verification only compares hashes, pixel values remain private.</p>
+                </div>
                 
-                <InfoCard variant="blue">
-                    <strong>🔍 How it works:</strong> The verification checks if the proof was generated 
-                    for the reference image without revealing any pixel values. Only the hash is compared.
-                </InfoCard>
-                
-                <div class="flex flex-col items-center gap-4 my-6">
+                <div class="flex flex-col items-center gap-4 my-8">
                     <FileUpload 
                         accept=".json,application/json"
                         label={`Upload a ${proofSystem === 'groth16' ? 'proof.json' : 'plonk-proof.json'} file`}
@@ -123,8 +123,8 @@
                     />
 
                     {#if proofData}
-                        <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-xs">
-                            <p class="text-sm text-green-800 font-semibold">✓ {proofSystem === 'groth16' ? 'Groth16' : 'PLONK'} proof file loaded successfully</p>
+                        <div class="p-4 bg-green-50 border border-green-200 rounded-xs w-full">
+                            <p class="text-base text-green-800 font-semibold text-center">✓ {proofSystem === 'groth16' ? 'Groth16' : 'PLONK'} proof file loaded successfully</p>
                         </div>
                     {/if}
                 </div>

@@ -1,6 +1,6 @@
 // src/routes/api/plonk/verify/+server.ts
 import { json, error } from "@sveltejs/kit";
-import { verifyNoirProof } from "$lib/utils/plonk-backend";
+import { verifyNoirProof } from "$lib/utils/legacy/plonk-backend";
 import { REFERENCE_HASH } from "$lib/utils/reference-hash";
 
 export async function POST({ request, fetch }) {

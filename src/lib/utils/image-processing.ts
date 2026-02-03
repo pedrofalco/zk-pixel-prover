@@ -1,42 +1,21 @@
 /**
  * Utility functions for image processing
+ * 
+ * NOTE: This now uses client-side processing (no server communication)
+ * All image processing and hash calculation happens in the browser
  */
 
+import { processImageFileClient } from './image-processing-client';
+
+/**
+ * Process an image file to extract RGB pixels and calculate hash
+ * All processing happens client-side - no data is sent to the server
+ * 
+ * @param file - Image file (JPEG, PNG, WebP, GIF)
+ * @returns Object with pixels array (192 RGB values) and hash string
+ */
 export async function processImageFile(file: File): Promise<{ pixels: number[]; hash: string }> {
-    // Step 1: Process image to get pixels
-    const formData = new FormData();
-    formData.append('image', file);
-
-    const processResponse = await fetch('/api/process-image', {
-        method: 'POST',
-        body: formData
-    });
-
-    if (!processResponse.ok) {
-        const errorData = await processResponse.json();
-        throw new Error(errorData.message || 'Failed to process image');
-    }
-
-    const processData = await processResponse.json();
-    const pixels = processData.data.pixels;
-
-    // Step 2: Calculate hash
-    const hashResponse = await fetch('/api/calculate-hash', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ pixels })
-    });
-
-    if (!hashResponse.ok) {
-        const errorData = await hashResponse.json();
-        throw new Error(errorData.message || 'Failed to calculate hash');
-    }
-
-    const hashData = await hashResponse.json();
-    const hash = hashData.data.hash;
-
-    return { pixels, hash };
+    // Use client-side processing (privacy-first: server never sees the image)
+    return processImageFileClient(file);
 }
 

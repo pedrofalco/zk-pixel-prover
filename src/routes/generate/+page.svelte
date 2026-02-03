@@ -7,7 +7,6 @@
     import PageHeader from '$lib/components/PageHeader.svelte';
     import InfoCard from '$lib/components/ui/InfoCard.svelte';
     import ContentCard from '$lib/components/ui/ContentCard.svelte';
-    import ProcessedImageDisplay from '$lib/components/ProcessedImageDisplay.svelte';
     import ReferenceImageDownload from '$lib/components/ReferenceImageDownload.svelte';
     import ProofSystemToggle from '$lib/components/ProofSystemToggle.svelte';
     import ProofSystemInfo from '$lib/components/ui/ProofSystemInfo.svelte';
@@ -87,7 +86,7 @@
 
 </script>
 
-<div class="min-h-screen flex flex-col items-center justify-center p-4 text-black font-mono">
+<div class="min-h-screen flex flex-col items-center justify-center md:p-4 text-black font-mono">
     <PageHeader 
         title="Generate Zero-Knowledge Proof"
         description="Prove you know a specific image <strong>without revealing its pixels</strong>."
@@ -100,39 +99,31 @@
                 
                 <ProofSystemInfo system={proofSystem} context="generate" />
                 
-                <p>
-                    Generate a <strong>cryptographic proof</strong> that proves you know an image's pixels without revealing them. 
-                    Upload any image, <ReferenceImageDownload 
-                        imagePath="/sample_4x4.jpeg"
-                        filename="sample_4x4.jpeg"
-                        errorMessage="Failed to download reference image"
-                        text="download the reference image"
-                        title="Download the reference image to test the system"
-                    />, or <ReferenceImageDownload 
-                        imagePath="/sample_4x4_fake.jpeg"
-                        filename="sample_4x4_fake.jpeg"
-                        errorMessage="Failed to download fake image"
-                        text="download a fake image"
-                        title="Download a fake image to test verification"
-                    /> to test verification.
-                </p>
+                <div class="text-sm text-gray-700 space-y-3">
+                    <p><strong>How to use:</strong></p>
+                    <ol class="list-decimal list-inside space-y-1 ml-2">
+                        <li>Upload any image (or <ReferenceImageDownload 
+                            imagePath="/sample_4x4.jpeg"
+                            filename="sample_4x4.jpeg"
+                            errorMessage="Failed to download reference image"
+                            text="download sample"
+                            title="Download the reference image to test the system"
+                        />)</li>
+                        <li>Click "Generate Proof" to create a zero-knowledge proof</li>
+                        <li>Download your proof and verify it in the <a href="/verify" class="underline font-semibold">/verify</a> page</li>
+                    </ol>
+                </div>
                 
-                <InfoCard variant="blue">
-                    <strong>💡 The Power:</strong> Generate proofs for any image and download them. 
-                    Then go to <a href="/verify" class="underline font-semibold">/verify</a> to check if a proof 
-                    matches the <strong>reference image</strong> (sample_4x4.jpeg) without revealing any pixel values.
-                </InfoCard>
-                
-                <div class="flex flex-col items-center gap-4 my-6">
+                <div class="flex flex-col items-center gap-4 my-8">
                     <ImageUpload 
                         onImageProcessed={handleImageProcessed}
                     />
                     
                     {#if imageData}
-                        <ProcessedImageDisplay 
-                            pixels={imageData.pixels} 
-                            hash={imageData.hash} 
-                        />
+                        <div class="p-4 bg-green-50 border border-green-200 rounded-xs w-full">
+                            <p class="text-base text-green-800 font-semibold text-center">✓ Image processed successfully</p>
+                            <p class="text-xs text-green-700 mt-2 text-center font-mono break-all">Hash: {imageData.hash}</p>
+                        </div>
                     {/if}
                 </div>
             </div>
