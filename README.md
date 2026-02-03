@@ -1,18 +1,66 @@
-# Zero Knowledge Image Attestation
+# Zero-Knowledge Image Attestation
 
-A zero-knowledge proof system for image attestation, supporting both **PLONK** (Noir + Barretenberg) and **Groth16** (Circom + SnarkJS) proof systems. This application allows you to generate cryptographic proofs that demonstrate knowledge of a specific image without revealing the image itself.
+A minimal zero-knowledge proof demo that attests knowledge of private structured data, using images as a concrete stand-in.  
+Supports **PLONK (Noir + Barretenberg)** and **Groth16 (Circom + SnarkJS)**.
 
-## Introduction
+PLONK proofs are generated client-side. Groth16 proofs are currently generated server-side.
 
-This project implements zero-knowledge proofs for image attestation, where:
+---
 
-- A **prover** can demonstrate they know a specific image (the reference image) without revealing the image pixels
-- A **verifier** can check the proof's validity without learning anything about the image
-- The proof is cryptographically secure and can be verified by anyone with the verification key
+## What this is
 
-The application processes images at 4x4 pixels (48 RGB values), computes a Poseidon hash, and generates a zero-knowledge proof that the computed hash matches a reference hash.
+This project explores how zero-knowledge proofs can be used to prove knowledge of private data **without revealing the data itself**.
 
-## Quick Start
+A prover generates a ZK proof that a private input matches a public commitment.  
+A verifier checks the proof without learning anything about the input.
+
+The private input is represented as a small image (4×4 pixels), but the image itself is incidental.
+
+---
+
+## Why images
+
+Images are used as a simple, intuitive proxy for **private structured data**: high-dimensional, information-rich and sensitive.
+
+In that sense, this maps naturally to domains such as:
+**ID documents, biometrics, sensor data, device fingerprints, capture-time attestations**.
+
+The same approach applies to any structured private input.
+
+---
+
+## How it works (high level)
+
+- A 4×4 RGB image (48 values) is flattened
+- A Poseidon hash is computed inside the circuit
+- The prover generates a ZK proof that the computed hash matches a public reference
+- Anyone with the verification key can verify the proof
+
+---
+
+## Scope
+
+This is a **theoretical–practical exploration**, not a production system.
+
+The goal is to explore:
+- circuit constraints
+- different proving systems
+- client-side proving and trust boundaries
+
+The 4×4 resolution is intentional to keep circuits small and reasoning explicit.
+
+---
+
+## Stack
+
+- Noir + Barretenberg (PLONK)
+- Circom + SnarkJS (Groth16)
+- Poseidon hash
+- Svelte frontend
+
+---
+
+## Quick start
 
 ### Installation
 
