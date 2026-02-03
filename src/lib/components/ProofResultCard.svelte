@@ -6,25 +6,33 @@
     export let onDownload: (() => void) | null = null;
 </script>
 
-<div bind:this={element} class="w-full max-w-4xl bg-white/15 backdrop-blur-lg rounded-xs p-8 mb-4 border border-white/20 shadow">
-    <h3 class="text-2xl font-bold mb-2">Proof Generated</h3>
-    <p class="mb-4 opacity-90">
-        A ZK proof was created that demonstrates knowledge of the image without revealing the pixels.
-    </p>
-    <p class="text-sm text-gray-400 mb-4">
-        The proof contains cryptographic evidence that you know the pixel values, but the pixels themselves are never revealed.
-    </p>
+<div bind:this={element} class="w-full max-w-4xl bg-white/15 backdrop-blur-lg rounded-xs p-6 mb-4 border border-white/20 shadow">
+    <div class="flex items-start gap-3 mb-4">
+        <div class="text-3xl">✅</div>
+        <div class="flex-1">
+            <h3 class="text-xl font-bold mb-1">Proof Generated Successfully</h3>
+            <p class="text-sm text-gray-700">
+                Your zero-knowledge proof has been created. Download it to verify later.
+            </p>
+        </div>
+    </div>
+    
     {#if onDownload}
         <button
             onclick={onDownload}
-            class="mb-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xs font-semibold transition-colors flex items-center gap-2"
+            class="w-full mb-3 px-4 py-3 bg-green-600/80 hover:bg-green-700 text-white rounded-xs font-semibold transition-colors flex items-center justify-center gap-2"
         >
             <span>💾</span>
-            Download Proof
+            Download Proof File
         </button>
     {/if}
-    <details class="mt-4">
-        <summary class="cursor-pointer p-3 bg-white/10 rounded-xs mb-2 font-medium hover:bg-white/20 transition-colors">
+    
+    <div class="text-xs text-gray-700 bg-white/5 p-3 rounded-xs mb-3">
+        <strong>Next step:</strong> Use the downloaded file in the <a href="/verify" class="underline font-bold">/verify</a> page to check if it matches the reference image.
+    </div>
+    
+    <details class="mt-2">
+        <summary class="cursor-pointer p-2 bg-white/5 rounded-xs text-xs font-medium hover:bg-white/10 transition-colors">
             View technical details
         </summary>
         <div class="mt-2">

@@ -5,7 +5,6 @@
     export let onImageProcessed: ((pixels: number[], hash: string) => void) | null = null;
     
     let processing = false;
-    let previewUrl: string | null = null;
 
     async function handleFileSelected(file: File) {
         // Validate file type
@@ -14,12 +13,6 @@
             alert(`Unsupported image format: ${file.type}`);
             return;
         }
-
-        // Create preview
-        if (previewUrl) {
-            URL.revokeObjectURL(previewUrl);
-        }
-        previewUrl = URL.createObjectURL(file);
 
         // Process image
         processing = true;
@@ -46,10 +39,4 @@
         processingMessage="Processing image..."
         icon={processing ? '⏳' : '📤'}
     />
-    
-    {#if previewUrl}
-        <div class="mt-2">
-            <img src={previewUrl} alt="Preview" class="max-w-xs rounded-xs border-2 border-gray-300 shadow-md" />
-        </div>
-    {/if}
 </div>

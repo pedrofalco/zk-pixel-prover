@@ -17,13 +17,13 @@
 {#if system === 'groth16'}
     <div class="p-3 bg-blue-50 border-l-4 border-blue-500 rounded-xs">
         <p class="text-sm text-blue-900">
-            <strong>🔷 Groth16 Mode:</strong> {messages.groth16[context]}
+            <strong>🔷 Groth16:</strong> {messages.groth16[context]}
         </p>
     </div>
 {:else}
     <div class="p-3 bg-purple-50 border-l-4 border-purple-500 rounded-xs">
         <p class="text-sm text-purple-900">
-            <strong>🔶 PLONK Mode:</strong> {messages.plonk[context]}
+            <strong>🔶 PLONK:</strong> {messages.plonk[context]}
         </p>
     </div>
 {/if}
